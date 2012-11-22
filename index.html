@@ -111,10 +111,11 @@
       ds.fetch({ 
         success : function() {
 
+          // Add computed columns to the dataset
           ds.addComputedColumn("DayNumber", "number", function(row) {
             var epochms = date_to_epoch(row["DateTime"]),
                 num_day = (epochms - epochms % MS_BY_DAY) / MS_BY_DAY;
-                
+
             return num_day; 
           });
 
