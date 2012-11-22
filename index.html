@@ -76,21 +76,54 @@
 
     <script type="text/javascript">
 
-      // Initialize, parse and retrive the earthquake dataset
+      // Load the dataset from Google Spreadsheets
+      //
+      //   Using the option 'fast' is safe, since the spreadsheet doesn't
+      // contain UTF-16 characters.
+      var googleSpreadsheetKey = "0AplN8f0nla78dFpmUUNNMDFCTmo1NXlEV3RtUkhLaFE"
+
+
       var ds = new Miso.Dataset({
         importer : Miso.Dataset.Importers.GoogleSpreadsheet,
         parser : Miso.Dataset.Parsers.GoogleSpreadsheet,
-        key : "0AplN8f0nla78dFpmUUNNMDFCTmo1NXlEV3RtUkhLaFE",
+        key : googleSpreadsheetKey,
         worksheet : "1",
-        fast: true
+        fast: true, 
+        columns: [
+          { name: "DateTime",   type: "time"},
+          { name: "Latitude",   type: "number"},
+          { name: "Longitude",  type: "number"},
+          { name: "Depth",      type: "number"},
+          { name: "Magnitude",  type: "number"},
+          { name: "MagType",    type: "string"},
+          { name: "NbStations", type: "number"},
+          { name: "Gap",        type: "string"},
+          { name: "Distance",   type: "string"},
+          { name: "RMS",        type: "number"},
+          { name: "Source",     type: "string"},
+          { name: "EventID",    type: "string"}
+        ]
       });
+
+      var date_to_epoch = Miso.Dataset.types.time.numeric,
+          MS_BY_DAY = 24 * 60 * 60 * 1000;
 
       ds.fetch({ 
         success : function() {
+
+          ds.addComputedColumn("DayNumber", "number", function(row) {
+            var epochms = date_to_epoch(row["DateTime"]),
+                num_day = (epochms - epochms % MS_BY_DAY) / MS_BY_DAY;
+                
+            return num_day; 
+          });
+
+
           console.log(ds.columnNames());
+
         },
         error : function() {
-          console.log("Are you sure you are connected to the internet?");
+          console.log("Error accesing the data.");
         }
       });
 
