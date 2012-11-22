@@ -48,10 +48,14 @@
     </div>
 
     <div class="row-fluid">
-      <div class="span4"></div>
+      <div class="span4">
+        <div id="bar"></div>
+      </div>
       <div class="span8"></div>
     </div>
 
+
+    <!-- Boostrap -->
     <script src="js/jquery.js"></script>
     <script src="js/bootstrap-transition.js"></script>
     <script src="js/bootstrap-alert.js"></script>
@@ -65,6 +69,32 @@
     <script src="js/bootstrap-collapse.js"></script>
     <script src="js/bootstrap-carousel.js"></script>
     <script src="js/bootstrap-typeahead.js"></script>
+
+    <!-- Miso Dataset -->
+    <script src="js/miso.ds.deps.min.js"></script>
+
+
+    <script type="text/javascript">
+
+      // Initialize, parse and retrive the earthquake dataset
+      var ds = new Miso.Dataset({
+        importer : Miso.Dataset.Importers.GoogleSpreadsheet,
+        parser : Miso.Dataset.Parsers.GoogleSpreadsheet,
+        key : "0AplN8f0nla78dFpmUUNNMDFCTmo1NXlEV3RtUkhLaFE",
+        worksheet : "1",
+        fast: true
+      });
+
+      ds.fetch({ 
+        success : function() {
+          console.log(ds.columnNames());
+        },
+        error : function() {
+          console.log("Are you sure you are connected to the internet?");
+        }
+      });
+
+    </script>
 
   </body>
 </html>
