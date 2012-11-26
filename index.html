@@ -26,6 +26,10 @@
         position: absolute;
       }
 
+      .eqpoint {
+        fill: #00b4cc;
+      }
+
     </style>
     <link href="css/bootstrap-responsive.css" rel="stylesheet">
 
@@ -179,6 +183,7 @@
 
             var first = true;
             layer.draw = function() {
+
               if (first) {
                 svg.attr("width",  layer.map.dimensions.x)
                    .attr("height", layer.map.dimensions.y)
@@ -194,12 +199,14 @@
             };
 
             layer.data = function(x) {
+
               collection = x;
               bounds = d3.geo.bounds(collection);
               feature = g.selectAll("path")
                 .data(collection.features)
                 .enter()
-                .append("path");
+                .append("path")
+                .attr("class", "eqpoint");
         
               return layer;
             };
@@ -215,7 +222,7 @@
 
 
         // Configure the map
-        mapbox.auto('map', 'examples.map-vyofok3q', function(map) {
+        mapbox.auto('map', 'pnavarrc.map-me21qrt6', function(map) {
           l = d3layer().data(points);
           map.addLayer(l);
           map.extent(l.extent());
