@@ -196,7 +196,7 @@
               path = d3.geo.path()
                 .projection(layer.project)
                 .pointRadius(function(d) {
-                  return Math.floor(Math.sqrt(100 * d.properties.mag));
+                  return Math.floor(0.2 * Math.pow(2, d.properties.mag));
                 });
               feature.attr("d", path);
 
@@ -226,10 +226,14 @@
 
 
         // Configure the map
-        mapbox.auto('map', 'pnavarrc.map-me21qrt6', function(map) {
-          l = d3layer().data(points);
-          map.addLayer(l);
-          map.extent(l.extent());
+        mapbox.load('pnavarrc.map-me21qrt6', function(o) {
+
+          var eql= d3layer().data(points),
+              map = mapbox.map("map", o.layer, null, []);
+
+          map.addLayer(eql);
+          map.extent(eql.extent());
+
         });
       }
         ,
