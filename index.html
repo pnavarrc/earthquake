@@ -27,7 +27,7 @@
       }
 
       .eqpoint {
-        fill: #00b4cc;
+        fill: rgba(0, 180, 204, 0.05);
       }
 
     </style>
@@ -193,7 +193,11 @@
                 first = false;
               }
 
-              path = d3.geo.path().projection(layer.project);
+              path = d3.geo.path()
+                .projection(layer.project)
+                .pointRadius(function(d) {
+                  return Math.floor(Math.sqrt(100 * d.properties.mag));
+                });
               feature.attr("d", path);
 
             };
