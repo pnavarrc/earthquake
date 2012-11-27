@@ -190,13 +190,26 @@
                    .style("margin-left", "0px")
                    .style("margin-top", "0px");
 
-                path = d3.geo.path()
+                var zeroPath = d3.geo.path()
                   .projection(layer.project)
                   .pointRadius(function(d) {
-                  return Math.floor(0.2 * Math.pow(2, d.properties.mag));
+                  return Math.floor(0.1 * Math.pow(2, d.properties.mag));
                 });
 
                 feature.attr("d", path);
+
+                var path = d3.geo.path()
+                  .projection(layer.project)
+                  .pointRadius(function(d) {
+                  return Math.floor(0.4 * Math.pow(2, d.properties.mag));
+                });
+
+                feature.transition()
+                  .delay(function(d) {
+                    return d.properties.day;
+                  })
+                  .duration(1000)
+                  .attr("d", path);
 
                 first = false;
               }
