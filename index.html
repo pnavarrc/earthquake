@@ -190,15 +190,16 @@
                    .style("margin-left", "0px")
                    .style("margin-top", "0px");
 
-                first = false;
-              }
-
-              path = d3.geo.path()
-                .projection(layer.project)
-                .pointRadius(function(d) {
+                path = d3.geo.path()
+                  .projection(layer.project)
+                  .pointRadius(function(d) {
                   return Math.floor(0.2 * Math.pow(2, d.properties.mag));
                 });
-              feature.attr("d", path);
+
+                feature.attr("d", path);
+
+                first = false;
+              }
 
             };
 
