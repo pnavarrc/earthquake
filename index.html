@@ -30,6 +30,10 @@
         fill: rgba(0, 180, 204, 0.05);
       }
 
+      .invisible {
+        fill: rgba(0, 180, 204, 0);
+      }
+
     </style>
     <link href="css/bootstrap-responsive.css" rel="stylesheet">
 
@@ -122,7 +126,6 @@
         ]
       });
 
-      
 
       ds.fetch({ 
         success : function() {
@@ -145,7 +148,8 @@
               "type": "Feature",
               "properties": {
                 "day": datetime2epochday(row["DateTime"]) + offsetDay,
-                "mag": row["Magnitude"]
+                "mag": row["Magnitude"],
+                "year": moment(row["DateTime"]).year()
               },
               "geometry": {
                 "type": "Point",
@@ -153,6 +157,11 @@
               }
             });
           });
+
+          // Parameters
+          var totalDuration = 20 * 1000,
+              lastDay = d3.max(pointFeatures, function(d) { return d.properties.day; })
+              dayDuration = Math.floor(totalDuration / lastDay);
 
           var points = {
             "type": "FeatureCollection",
@@ -174,6 +183,11 @@
                 svg = div.append("svg"),
                 g = svg.append("g");
 
+            var year = svg.append("text")
+                .attr("x", 40)
+                .attr("y", 80)
+                .attr("id", "year");
+
             layer.parent = div.node();
 
             layer.project = function(x) {
@@ -192,11 +206,31 @@
 
                 path = d3.geo.path()
                   .projection(layer.project)
+                  .pointRadius(0);
+
+                feature.attr("d", path);                   
+
+                path = d3.geo.path()
+                  .projection(layer.project)
                   .pointRadius(function(d) {
-                  return Math.floor(0.2 * Math.pow(2, d.properties.mag));
+                  return Math.floor(0.4 * Math.pow(2, d.properties.mag));
                 });
 
-                feature.attr("d", path);
+                feature.transition()
+                  .delay(function(d) {
+                    return d.properties.day;
+                  })
+                  .duration(function(d) { 
+                    return Math.floor(100 * d.properties.mag);
+                  })
+                  .each("start", function() {
+                    year.text(this.__data__.properties.year)
+                        .attr("fill", d3.rgb(0, 180, 204));
+                  })
+                  .each("end", function() {
+                    d3.select(this).attr("class", "invisible");
+                  })
+                  .attr("d", path);
 
                 first = false;
               }
