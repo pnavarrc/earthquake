@@ -1,14 +1,283 @@
-<!DOCTYPE HTML>
-<html>
-<head>
-	<title>Title</title>
-	<script src="js/libs/misomin.js"></script>
-	<script src="http://d3js.org/d3.v2.min.js"></script>
-</head>
-<body>
-	<div id="content"></div>
-  <script type="text/javascript">
-    <!-- Code here -->
-  </script>
-</body>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <style>
+      body {
+        padding-top: 60px;
+        background-color: #424242;
+        color: #aaaaaa;
+      }
+
+      #map { 
+        position: absolute; 
+        top: 0; 
+        bottom: 0; 
+        width: 800px; 
+      }
+
+      .d3-vec {
+        position: absolute;
+      }
+
+      .eqpoint {
+        fill: rgba(0, 180, 204, 0.05);
+      }
+
+      .invisible {
+        fill: rgba(0, 180, 204, 0);
+      }
+
+    </style>
+    <link href="css/bootstrap-responsive.css" rel="stylesheet">
+
+    <!-- Fav and touch icons -->
+    <link rel="shortcut icon" href="ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="ico/apple-touch-icon-57-precomposed.png">
+  </head>
+
+  <body>
+
+    <!-- Navigation Bar -->
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="#">Earthquake Map</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="active"><a href="#">Home</a></li>
+              <li><a href="#about">About</a></li>
+              <li><a href="#contact">Contact</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Navigation Bar -->
+
+    <div class="container-fluid">
+      <div class="row-fluid">
+        <div id="eq-controls" class="span4"></div>
+        <div class="span8">
+          <div id="map"></div>
+          <div id="d3layer" class="d3-vec"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Javascript Dependencies -->
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap-transition.js"></script>
+    <script src="js/bootstrap-alert.js"></script>
+    <script src="js/bootstrap-modal.js"></script>
+    <script src="js/bootstrap-dropdown.js"></script>
+    <script src="js/bootstrap-scrollspy.js"></script>
+    <script src="js/bootstrap-tab.js"></script>
+    <script src="js/bootstrap-tooltip.js"></script>
+    <script src="js/bootstrap-popover.js"></script>
+    <script src="js/bootstrap-button.js"></script>
+    <script src="js/bootstrap-collapse.js"></script>
+    <script src="js/bootstrap-carousel.js"></script>
+    <script src="js/bootstrap-typeahead.js"></script>
+    <script src="js/miso.ds.deps.min.js"></script>
+    <script src="js/d3.v2.js"></script>
+    
+    <script src='http://api.tiles.mapbox.com/mapbox.js/v0.6.6/mapbox.js'></script>
+    <link href='http://api.tiles.mapbox.com/mapbox.js/v0.6.6/mapbox.css' rel='stylesheet' />
+
+    <script type="text/javascript">
+
+      // Load the Data
+      var googleSpreadsheetKey = "0AplN8f0nla78dFpmUUNNMDFCTmo1NXlEV3RtUkhLaFE"
+
+      var ds = new Miso.Dataset({
+        importer : Miso.Dataset.Importers.GoogleSpreadsheet,
+        parser : Miso.Dataset.Parsers.GoogleSpreadsheet,
+        key : googleSpreadsheetKey,
+        worksheet : "1",
+        fast: true, 
+        columns: [
+          { name: "DateTime",   type: "time"},
+          { name: "Latitude",   type: "number"},
+          { name: "Longitude",  type: "number"},
+          { name: "Depth",      type: "number"},
+          { name: "Magnitude",  type: "number"},
+          { name: "MagType",    type: "string"},
+          { name: "NbStations", type: "number"},
+          { name: "Gap",        type: "string"},
+          { name: "Distance",   type: "string"},
+          { name: "RMS",        type: "number"},
+          { name: "Source",     type: "string"},
+          { name: "EventID",    type: "string"}
+        ]
+      });
+
+
+      ds.fetch({ 
+        success : function() {
+
+          // Prepare the data
+
+          // Convert from Miso Dataset Time to days since epoch
+          function datetime2epochday(datetime) {
+            var epochms = Miso.Dataset.types.time.numeric(datetime),
+                MS_BY_DAY = 24 * 60 * 60 * 1000;
+            return (epochms - epochms % MS_BY_DAY) / MS_BY_DAY;
+          }
+
+          var firstRow = this.rowByPosition(0),
+              offsetDay = Math.abs(datetime2epochday(firstRow["DateTime"]));
+
+          var pointFeatures = [];
+          this.each(function(row) {
+            pointFeatures.push({
+              "type": "Feature",
+              "properties": {
+                "day": datetime2epochday(row["DateTime"]) + offsetDay,
+                "mag": row["Magnitude"],
+                "year": moment(row["DateTime"]).year()
+              },
+              "geometry": {
+                "type": "Point",
+                "coordinates": [row["Longitude"], row["Latitude"]]
+              }
+            });
+          });
+
+          // Parameters
+          var totalDuration = 20 * 1000,
+              lastDay = d3.max(pointFeatures, function(d) { return d.properties.day; })
+              dayDuration = Math.floor(totalDuration / lastDay);
+
+          var points = {
+            "type": "FeatureCollection",
+            "features": pointFeatures
+          };
+
+          // Visualization Setup
+          var w = 800,
+              h = 600;
+
+          function d3layer() {
+
+            var layer = {},
+                bounds,
+                feature,
+                collection;
+
+            var div = d3.select("#d3layer"),
+                svg = div.append("svg"),
+                g = svg.append("g");
+
+            var year = svg.append("text")
+                .attr("x", 40)
+                .attr("y", 80)
+                .attr("id", "year");
+
+            layer.parent = div.node();
+
+            layer.project = function(x) {
+              var point = layer.map.locationPoint({ lat: x[1], lon: x[0] });
+              return [point.x, point.y];
+            }
+
+            var first = true;
+            layer.draw = function() {
+
+              if (first) {
+                svg.attr("width",  layer.map.dimensions.x)
+                   .attr("height", layer.map.dimensions.y)
+                   .style("margin-left", "0px")
+                   .style("margin-top", "0px");
+
+                path = d3.geo.path()
+                  .projection(layer.project)
+                  .pointRadius(0);
+
+                feature.attr("d", path);                   
+
+                path = d3.geo.path()
+                  .projection(layer.project)
+                  .pointRadius(function(d) {
+                  return Math.floor(0.4 * Math.pow(2, d.properties.mag));
+                });
+
+                feature.transition()
+                  .delay(function(d) {
+                    return d.properties.day;
+                  })
+                  .duration(function(d) { 
+                    return Math.floor(100 * d.properties.mag);
+                  })
+                  .each("start", function() {
+                    year.text(this.__data__.properties.year)
+                        .attr("fill", d3.rgb(0, 180, 204));
+                  })
+                  .each("end", function() {
+                    d3.select(this).attr("class", "invisible");
+                  })
+                  .attr("d", path);
+
+                first = false;
+              }
+
+            };
+
+            layer.data = function(x) {
+
+              collection = x;
+              bounds = d3.geo.bounds(collection);
+              feature = g.selectAll("path")
+                .data(collection.features)
+                .enter()
+                .append("path")
+                .attr("class", "eqpoint");
+        
+              return layer;
+            };
+
+            layer.extent = function() {
+              return new MM.Extent(
+                new MM.Location(bounds[0][1], bounds[0][0]),
+                new MM.Location(bounds[1][1], bounds[1][0]));
+            };
+
+            return layer;
+          };
+
+
+        // Configure the map
+        mapbox.load('pnavarrc.map-me21qrt6', function(o) {
+
+          var eql= d3layer().data(points),
+              map = mapbox.map("map", o.layer, null, []);
+
+          map.addLayer(eql);
+          map.extent(eql.extent());
+
+        });
+      }
+        ,
+        error : function() {
+          console.log("Error accesing the data.");
+        }
+      });
+
+    </script>
+
+  </body>
 </html>

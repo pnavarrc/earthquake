@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src='http://api.tiles.mapbox.com/mapbox.js/v0.6.6/mapbox.js'></script>
+  <link href='http://api.tiles.mapbox.com/mapbox.js/v0.6.6/mapbox.css' rel='stylesheet' />
+  <style>
+    body { margin:0; padding:0; }
+    #map { position:absolute; top:0; bottom:0; width:100%; }
+  </style>
+</head>
+<body>
+<div id='map'></div>
+
+<script src='http://d3js.org/d3.v2.min.js'></script>
+
+<style>
+  body { margin:0; padding:0; }
+  #map { position:absolute; top:0; bottom:0; width:100%; }
+  .d3-vec { position:absolute; }
+  path {
+    fill: #000;
+    fill-opacity: .2;
+    stroke: #fff;
+    stroke-width: 1.5px;
+  }
+
+  path:hover {
+    fill: brown;
+    fill-opacity: .7;
+  }
+</style>
+
+<script>
+function d3layer() {
+
+    var f = {}, bounds, feature, collection;
+    var div = d3.select(document.body)
+        .append("div")
+        .attr('class', 'd3-vec'),
+        svg = div.append('svg'),
+        g = svg.append("g");
+
+    f.parent = div.node();
+
+    f.project = function(x) {
+      var point = f.map.locationPoint({ lat: x[1], lon: x[0] });
+      console.log(point);
+      return [point.x, point.y];
+    };
+
+    var first = true;
+    f.draw = function() {
+
+      if (first) {
+        svg.attr("width", f.map.dimensions.x)
+          .attr("height", f.map.dimensions.y)
+          .style("margin-left", "0px")
+          .style("margin-top", "0px");
+
+        first = false;
+        console.log("draw");
+      }
+    };
+
+    f.data = function(x) {
+
+      var latExt = d3.extent(x, function(d) {return d.lat; }),
+          lonExt = d3.extent(x, function(d) {return d.lon; });
+
+      collection = x;
+      bounds = [[lonExt[0], latExt[0]],[lonExt[1], latExt[1]]];
+      feature = g.selectAll("circle")
+        .data(x)
+        .enter().append("circle");
+
+      console.log("data");
+      return f;
+    };
+
+    f.extent = function() {
+        return new MM.Extent(
+            new MM.Location(bounds[0][1], bounds[0][0]),
+            new MM.Location(bounds[1][1], bounds[1][0]));
+    };
+    return f;
+}
+var data = [
+  { day:  0, lat: -28.3, lon: -70.9, mag: 5.0},
+  { day: 18, lat: -28.1, lon: -65.6, mag: 5.3}
+];
+
+mapbox.auto('map', 'examples.map-vyofok3q', function(map) {
+    l = d3layer().data(data);
+    map.addLayer(l);
+    map.extent(l.extent());
+});
+</script>
+</body>
+</html>
