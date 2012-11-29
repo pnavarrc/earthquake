@@ -34,6 +34,10 @@
         fill: rgba(0, 180, 204, 0);
       }
 
+      #annotation-box p{
+        font-size: 12px;
+      }
+
     </style>
     <link href="css/bootstrap-responsive.css" rel="stylesheet">
 
@@ -71,7 +75,15 @@
 
     <div class="container-fluid">
       <div class="row-fluid">
-        <div id="eq-controls" class="span4"></div>
+        <div class="span4">
+          <div id="small-about">
+            Earthquakes of magnitude greater than 5.5 in Chile since 1963.
+          </div>
+          <div id="annotation-box">
+            <h4>Feb 27th, 2010: BioBio Offshore</h4>
+            <p>The 2010 Chile earthquake occurred off the coast of central Chile on Saturday, 27 February 2010, at 03:34 local time (06:34 UTC), having a magnitude of 8.8 on the moment magnitude scale, with intense shaking lasting for about three minutes.[5][1][2][6] It ranks as the sixth largest earthquake ever to be recorded by a seismograph. It was felt strongly in six Chilean regions (from Valparaíso in the north to Araucanía in the south), that together make up about 80 percent of the country's population.</p>
+          </div>
+        </div>
         <div class="span8">
           <div id="map"></div>
           <div id="d3layer" class="d3-vec"></div>
@@ -125,7 +137,6 @@
           { name: "EventID",    type: "string"}
         ]
       });
-
 
       ds.fetch({ 
         success : function() {
