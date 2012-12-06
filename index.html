@@ -77,11 +77,7 @@
       <div class="row-fluid">
         <div class="span4">
           <div id="small-about">
-            Earthquakes of magnitude greater than 5.5 in Chile since 1963.
-          </div>
-          <div id="annotation-box">
-            <h4>Feb 27th, 2010: BioBio Offshore</h4>
-            <p>The 2010 Chile earthquake occurred off the coast of central Chile on Saturday, 27 February 2010, at 03:34 local time (06:34 UTC), having a magnitude of 8.8 on the moment magnitude scale, with intense shaking lasting for about three minutes.[5][1][2][6] It ranks as the sixth largest earthquake ever to be recorded by a seismograph. It was felt strongly in six Chilean regions (from Valparaíso in the north to Araucanía in the south), that together make up about 80 percent of the country's population.</p>
+            Earthquakes in Chile.
           </div>
         </div>
         <div class="span8">
@@ -113,71 +109,33 @@
 
     <script type="text/javascript">
 
-      // Load the Data
-      var googleSpreadsheetKey = "0AplN8f0nla78dFpmUUNNMDFCTmo1NXlEV3RtUkhLaFE"
+      var MS_BY_DAY = 24 * 60 * 60 * 1000;
 
-      var ds = new Miso.Dataset({
-        importer : Miso.Dataset.Importers.GoogleSpreadsheet,
-        parser : Miso.Dataset.Parsers.GoogleSpreadsheet,
-        key : googleSpreadsheetKey,
-        worksheet : "1",
-        fast: true, 
-        columns: [
-          { name: "DateTime",   type: "time"},
-          { name: "Latitude",   type: "number"},
-          { name: "Longitude",  type: "number"},
-          { name: "Depth",      type: "number"},
-          { name: "Magnitude",  type: "number"},
-          { name: "MagType",    type: "string"},
-          { name: "NbStations", type: "number"},
-          { name: "Gap",        type: "string"},
-          { name: "Distance",   type: "string"},
-          { name: "RMS",        type: "number"},
-          { name: "Source",     type: "string"},
-          { name: "EventID",    type: "string"}
-        ]
-      });
+      var data = {};
 
-      ds.fetch({ 
-        success : function() {
+      d3.json("data/full.json", function(featureCollection) {
+        
+        function epoch_day(datetime) {
+          var epochms = Date.parse(datetime);
+          return (epochms - epochms % MS_BY_DAY) / MS_BY_DAY;
+        }
 
-          // Prepare the data
+        // Add new fields to the dataset
+        var pointFeatures = featureCollection.features,
+            firstItem = pointFeatures[0],
+            offsetDay = Math.abs(epoch_day(firstItem.properties.datetime));
 
-          // Convert from Miso Dataset Time to days since epoch
-          function datetime2epochday(datetime) {
-            var epochms = Miso.Dataset.types.time.numeric(datetime),
-                MS_BY_DAY = 24 * 60 * 60 * 1000;
-            return (epochms - epochms % MS_BY_DAY) / MS_BY_DAY;
-          }
+        pointFeatures.forEach(function(item) {
+          var date = new Date(item.properties.datetime);
 
-          var firstRow = this.rowByPosition(0),
-              offsetDay = Math.abs(datetime2epochday(firstRow["DateTime"]));
+          item.properties["day"] = epoch_day(item.properties.datetime) + offsetDay;
+          item.properties["year"] = date.getFullYear();
+        })
 
-          var pointFeatures = [];
-          this.each(function(row) {
-            pointFeatures.push({
-              "type": "Feature",
-              "properties": {
-                "day": datetime2epochday(row["DateTime"]) + offsetDay,
-                "mag": row["Magnitude"],
-                "year": moment(row["DateTime"]).year()
-              },
-              "geometry": {
-                "type": "Point",
-                "coordinates": [row["Longitude"], row["Latitude"]]
-              }
-            });
-          });
-
-          // Parameters
-          var totalDuration = 20 * 1000,
-              lastDay = d3.max(pointFeatures, function(d) { return d.properties.day; })
-              dayDuration = Math.floor(totalDuration / lastDay);
-
-          var points = {
-            "type": "FeatureCollection",
-            "features": pointFeatures
-          };
+        var numPoints = pointFeatures.length,
+            totalDuration = 20 * 1000,
+            lastDay = pointFeatures[numPoints - 1].properties.day,
+            dayDuration = Math.floor(totalDuration / lastDay);
 
           // Visualization Setup
           var w = 800,
@@ -224,7 +182,7 @@
                 path = d3.geo.path()
                   .projection(layer.project)
                   .pointRadius(function(d) {
-                  return Math.floor(0.4 * Math.pow(2, d.properties.mag));
+                    return 1 + Math.floor(0.4 * Math.pow(2, d.properties.magnitude));
                 });
 
                 feature.transition()
@@ -232,7 +190,7 @@
                     return d.properties.day;
                   })
                   .duration(function(d) { 
-                    return Math.floor(100 * d.properties.mag);
+                    return Math.floor(100 * d.properties.magnitude);
                   })
                   .each("start", function() {
                     year.text(this.__data__.properties.year)
@@ -273,21 +231,17 @@
 
         // Configure the map
         mapbox.load('pnavarrc.map-me21qrt6', function(o) {
-
-          var eql= d3layer().data(points),
+          var eql= d3layer().data(featureCollection),
               map = mapbox.map("map", o.layer, null, []);
 
           map.addLayer(eql);
           map.extent(eql.extent());
 
         });
-      }
-        ,
-        error : function() {
-          console.log("Error accesing the data.");
-        }
+
       });
 
+       
     </script>
 
   </body>
