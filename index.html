@@ -34,8 +34,10 @@
         fill: rgba(0, 180, 204, 0);
       }
 
-      #annotation-box p{
-        font-size: 12px;
+      .year {
+        fill: rgb(0, 180, 204);
+        font-family: "Verdana";
+        font-size: "60";
       }
 
     </style>
@@ -127,13 +129,12 @@
 
         pointFeatures.forEach(function(item) {
           var date = new Date(item.properties.datetime);
-
           item.properties["day"] = epoch_day(item.properties.datetime) + offsetDay;
           item.properties["year"] = date.getFullYear();
         })
 
         var numPoints = pointFeatures.length,
-            totalDuration = 20 * 1000,
+            totalDuration = 60 * 1000,
             lastDay = pointFeatures[numPoints - 1].properties.day,
             dayDuration = Math.floor(totalDuration / lastDay);
 
@@ -155,7 +156,7 @@
             var year = svg.append("text")
                 .attr("x", 40)
                 .attr("y", 80)
-                .attr("id", "year");
+                .attr("class", "year");
 
             layer.parent = div.node();
 
@@ -194,12 +195,13 @@
                   })
                   .each("start", function() {
                     year.text(this.__data__.properties.year)
-                        .attr("fill", d3.rgb(0, 180, 204));
+                      .attr("font-size", "50");
                   })
                   .each("end", function() {
-                    d3.select(this).attr("class", "invisible");
+                    d3.select(this).attr("fill-opacity", 0.0);
                   })
-                  .attr("d", path);
+                  .attr("d", path)
+                  .remove();
 
                 first = false;
               }
