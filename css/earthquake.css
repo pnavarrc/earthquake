@@ -1,0 +1,30 @@
+body {
+  padding-top: 60px;
+  background-color: #424242;
+  color: #aaaaaa;
+}
+
+#map { 
+  position: absolute; 
+  top: 0; 
+  bottom: 0; 
+  width: 800px; 
+}
+
+.d3-vec {
+  position: absolute;
+}
+
+.eqpoint {
+  fill: rgb(0, 180, 204);
+}
+
+.invisible {
+  fill: rgba(0, 180, 204, 0);
+}
+
+.year {
+  fill: rgb(60, 60, 60);
+  font-family: "Verdana";
+  font-size: "60";
+}
