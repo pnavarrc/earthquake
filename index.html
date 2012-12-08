@@ -7,6 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="Pablo Navarro Castillo">
 
+    <!-- Styles -->
     <link href="css/bootstrap.css" rel="stylesheet">
     <link href="css/bootstrap-responsive.css" rel="stylesheet">
     <link href="css/earthquake.css" rel="stylesheet">
@@ -43,17 +44,11 @@
       </div>
     </div>
 
+    <!-- Content -->
     <div class="container-fluid">
-      <div class="row-fluid">
-        <div class="span4">
-          <div id="small-about">
-            Earthquakes in Chile.
-          </div>
-        </div>
-        <div class="span8">
-          <div id="map"></div>
-          <div id="d3layer" class="d3-vec"></div>
-        </div>
+      <div class="span8">
+        <div id="map"></div>
+        <div id="d3layer" class="d3-vec"></div>
       </div>
     </div>
 
@@ -75,7 +70,6 @@
     <script src="js/d3.v2.js"></script>
     <script src='http://api.tiles.mapbox.com/mapbox.js/v0.6.6/mapbox.js'></script>
  
-
     <script type="text/javascript">
 
       var MS_BY_DAY = 24 * 60 * 60 * 1000,
@@ -141,8 +135,6 @@
             
           layer.parent = div.node();
 
-
-
           layer.project = function(x) {
             var point = layer.map.locationPoint({ lat: x[1], lon: x[0] });
             return [point.x, point.y];
@@ -185,10 +177,7 @@
 
             if (first) {
               setup_svg(layer.map.dimensions.x, layer.map.dimensions.y);
-              layer.draw_earthquakes();
-
               playLabel.on("click", layer.draw_earthquakes);
-
               first = false;
             }
 
