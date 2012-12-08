@@ -93,22 +93,31 @@
         });
       }
 
-
       d3.json("data/full.json", function(featureCollection) {
         
+        // Visualization variables
+        var div,
+            svg,
+            grp,
+            txtYear,
+            txtPlay;
+
         // Visualization setup
-        var div = d3.select("#d3layer"),
-            svg = div.append("svg"),
-            grp = svg.append("g"),
-            yearLabel = svg.append("text")
-              .attr("x",  30)
-              .attr("y", 100)
-              .attr("class", "year"),
-            playLabel = svg.append("text")
-              .attr("x", 30)
-              .attr("y", 150)
-              .text("PLAY ▶")
-              .attr("class", "year");
+        div = d3.select("#d3layer"),
+        svg = div.append("svg"),
+        grp = svg.append("g");
+
+        txtYear = svg.append("text")
+          .text("1900")
+          .attr("x",  30)
+          .attr("y", 100)
+          .attr("class", "year")
+          .attr("font-size", "50"),
+        txtPlay = svg.append("text")
+          .text("PLAY ▶")
+          .attr("x", 30)
+          .attr("y", 150)
+          .attr("class", "playout");
 
         addEarthquakeMetadata(featureCollection);
         
@@ -162,7 +171,7 @@
                 return Math.floor(100 * d.properties.magnitude);
               })
               .each("start", function() {
-                yearLabel.text(this.__data__.properties.year)
+                txtYear.text(this.__data__.properties.year)
                   .attr("font-size", "50");
                 d3.select(this).attr("class", "eqpoint")
                   .attr("fill-opacity", 0.2);
@@ -177,7 +186,13 @@
 
             if (first) {
               setup_svg(layer.map.dimensions.x, layer.map.dimensions.y);
-              playLabel.on("click", layer.draw_earthquakes);
+              txtPlay.on("click", layer.draw_earthquakes)
+                .on("mouseover", function() {
+                  txtPlay.attr("class", "playover");
+                })
+                .on("mouseout", function() {
+                  txtPlay.attr("class", "playout");
+                });
               first = false;
             }
 

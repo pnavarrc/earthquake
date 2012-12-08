@@ -19,6 +19,13 @@ body {
   fill: rgb(0, 180, 204);
 }
 
+.playout {
+  fill: rgb(60, 60, 60);
+}
+.playover {
+  fill: rgb(0, 180, 204);
+}
+
 .invisible {
   fill: rgba(0, 180, 204, 0);
 }
