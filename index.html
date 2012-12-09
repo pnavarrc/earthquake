@@ -46,6 +46,9 @@
 
     <!-- Content -->
     <div class="container-fluid">
+      <div class="span4">
+        Bla bla
+      </div>
       <div class="span8">
         <div id="map"></div>
         <div id="d3layer" class="d3-vec"></div>
@@ -116,7 +119,7 @@
         txtPlay = svg.append("text")
           .text("PLAY ▶")
           .attr("x", 30)
-          .attr("y", 150)
+          .attr("y", 130)
           .attr("class", "playout");
 
         addEarthquakeMetadata(featureCollection);
@@ -226,11 +229,14 @@
         mapbox.load('pnavarrc.map-me21qrt6', function(o) {
 
           earthquakeLayer = d3layer().data(featureCollection);
-          map = mapbox.map("map", o.layer, null, []);
+          map = mapbox.map("map", o.layer);
+          map.setExtent([
+            {lat:  15.00, lon: -30.00},
+            {lat: -55.00, lon: -85.00}
+          ]);
+          map.zoom(3);
                     
           map.addLayer(earthquakeLayer);
-          map.extent(earthquakeLayer.extent());
-
         });
 
       });
