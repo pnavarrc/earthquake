@@ -7,6 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="Pablo Navarro Castillo">
 
+    <!-- Styles -->
     <link href="css/bootstrap.css" rel="stylesheet">
     <link href="css/bootstrap-responsive.css" rel="stylesheet">
     <link href="css/earthquake.css" rel="stylesheet">
@@ -43,17 +44,14 @@
       </div>
     </div>
 
+    <!-- Content -->
     <div class="container-fluid">
-      <div class="row-fluid">
-        <div class="span4">
-          <div id="small-about">
-            Earthquakes in Chile.
-          </div>
-        </div>
-        <div class="span8">
-          <div id="map"></div>
-          <div id="d3layer" class="d3-vec"></div>
-        </div>
+      <div class="span4">
+        Earthquakes in Chile since 1900.
+      </div>
+      <div class="span8">
+        <div id="map"></div>
+        <div id="d3layer" class="d3-vec"></div>
       </div>
     </div>
 
@@ -75,7 +73,6 @@
     <script src="js/d3.v2.js"></script>
     <script src='http://api.tiles.mapbox.com/mapbox.js/v0.6.6/mapbox.js'></script>
  
-
     <script type="text/javascript">
 
       var MS_BY_DAY = 24 * 60 * 60 * 1000,
@@ -99,22 +96,31 @@
         });
       }
 
-
       d3.json("data/full.json", function(featureCollection) {
         
+        // Visualization variables
+        var div,
+            svg,
+            grp,
+            txtYear,
+            txtPlay;
+
         // Visualization setup
-        var div = d3.select("#d3layer"),
-            svg = div.append("svg"),
-            grp = svg.append("g"),
-            yearLabel = svg.append("text")
-              .attr("x",  30)
-              .attr("y", 100)
-              .attr("class", "year"),
-            playLabel = svg.append("text")
-              .attr("x", 30)
-              .attr("y", 150)
-              .text("PLAY ▶")
-              .attr("class", "year");
+        div = d3.select("#d3layer"),
+        svg = div.append("svg"),
+        grp = svg.append("g");
+
+        txtYear = svg.append("text")
+          .text("1900")
+          .attr("x",  30)
+          .attr("y", 100)
+          .attr("class", "year")
+          .attr("font-size", "50"),
+        txtPlay = svg.append("text")
+          .text("PLAY ▶")
+          .attr("x", 30)
+          .attr("y", 130)
+          .attr("class", "playout");
 
         addEarthquakeMetadata(featureCollection);
         
@@ -140,8 +146,6 @@
             first = true;
             
           layer.parent = div.node();
-
-
 
           layer.project = function(x) {
             var point = layer.map.locationPoint({ lat: x[1], lon: x[0] });
@@ -170,10 +174,10 @@
                 return Math.floor(100 * d.properties.magnitude);
               })
               .each("start", function() {
-                yearLabel.text(this.__data__.properties.year)
+                txtYear.text(this.__data__.properties.year)
                   .attr("font-size", "50");
                 d3.select(this).attr("class", "eqpoint")
-                  .attr("fill-opacity", 0.3);
+                  .attr("fill-opacity", 0.2);
               })
               .each("end", function() {
                 d3.select(this).attr("fill-opacity", 0.0);
@@ -185,10 +189,13 @@
 
             if (first) {
               setup_svg(layer.map.dimensions.x, layer.map.dimensions.y);
-              layer.draw_earthquakes();
-
-              playLabel.on("click", layer.draw_earthquakes);
-
+              txtPlay.on("click", layer.draw_earthquakes)
+                .on("mouseover", function() {
+                  txtPlay.attr("class", "playover");
+                })
+                .on("mouseout", function() {
+                  txtPlay.attr("class", "playout");
+                });
               first = false;
             }
 
@@ -222,11 +229,14 @@
         mapbox.load('pnavarrc.map-me21qrt6', function(o) {
 
           earthquakeLayer = d3layer().data(featureCollection);
-          map = mapbox.map("map", o.layer, null, []);
+          map = mapbox.map("map", o.layer);
+          map.setExtent([
+            {lat:  15.00, lon: -30.00},
+            {lat: -55.00, lon: -85.00}
+          ]);
+          map.zoom(3);
                     
           map.addLayer(earthquakeLayer);
-          map.extent(earthquakeLayer.extent());
-
         });
 
       });

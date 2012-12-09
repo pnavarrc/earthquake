@@ -1,0 +1,7 @@
+safe: true
+auto: true
+lsi: false
+server: true
+markdown: rdiscount
+pygments: true
+permalink: pretty
