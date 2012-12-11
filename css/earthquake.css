@@ -8,7 +8,7 @@ body {
   position: absolute; 
   top: 0; 
   bottom: 0; 
-  width: 800px; 
+  width: 100%; 
 }
 
 .d3-vec {
@@ -16,6 +16,13 @@ body {
 }
 
 .eqpoint {
+  fill: rgb(0, 180, 204);
+}
+
+.playout {
+  fill: rgb(60, 60, 60);
+}
+.playover {
   fill: rgb(0, 180, 204);
 }
 
