@@ -3,7 +3,7 @@ layout: default
 title: Earthquakes in Chile
 ---
 
-<script src="js/d3.v2.js"></script>
+<script src="/js/d3.v2.js"></script>
 <script src='http://api.tiles.mapbox.com/mapbox.js/v0.6.6/mapbox.js'></script>
 
 <!-- Content -->
