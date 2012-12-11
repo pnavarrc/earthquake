@@ -14,6 +14,8 @@ title: Earthquakes in Chile
   </div>
 </div>
 
+<script src="/earthquake/js/d3.v2.js"></script>
+<script src='http://api.tiles.mapbox.com/mapbox.js/v0.6.6/mapbox.js'></script>
 <script type="text/javascript">
 
   var MS_BY_DAY = 24 * 60 * 60 * 1000,
@@ -184,5 +186,4 @@ title: Earthquakes in Chile
    
 </script>
 
-<script src="/earthquake/js/d3.v2.js"></script>
-<script src='http://api.tiles.mapbox.com/mapbox.js/v0.6.6/mapbox.js'></script>
+
