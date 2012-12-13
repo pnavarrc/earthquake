@@ -1,0 +1,18 @@
+#sidebar {
+  position: absolute;
+  padding-left:  10px;
+  padding-right: 10px;
+  height: 100%;
+  z-index: 100;
+  background-color: #ffffff;
+}
+
+h1.heading {
+	font-size: 23px; 	
+}
+
+.map {
+	width: 700px;
+	height: 600px;
+}
+

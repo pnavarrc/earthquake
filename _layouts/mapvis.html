@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>{{ page.title }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="../css/bootstrap.css" rel="stylesheet">
+    <link href="../css/bootstrap-responsive.css" rel="stylesheet">
+    <link href='http://api.tiles.mapbox.com/mapbox.js/v0.6.7/mapbox.css' rel='stylesheet' />
+    <link href="../css/mapvis.css" rel="stylesheet">
+  </head>
+  <body>
+
+	<div class="row-fluid">
+
+	  <!-- Sidebar -->
+	  <div id="sidebar" class="span4 sidebar">
+
+	  	<div class="introduction">
+	  		<h1 class="heading">{{ page.title }}</h1>
+	  	</div>
+
+	  	<div class="tabbable">
+		  <ul class="nav nav-tabs">
+		    <li class="active"><a href="#tab-about" data-toggle="tab">About</a></li>
+		    <li><a href="#tab-data" data-toggle="tab">Data</a></li>
+		  </ul>
+		  <div class="tab-content">
+		    <div class="tab-pane active" id="tab-about">
+		      <address>
+			    <strong>Pablo Navarro Castillo</strong><br>
+			    <a href="mailto:#">pnavarrc@gmail.com</a>
+			  </address>
+		    </div>
+		    <div class="tab-pane" id="tab-data">
+		      <p>Data</p>
+		    </div>
+		  </div>
+		</div>
+	  </div>
+
+	  <!-- Map -->
+	  <div id="map" class="map"></div>
+	</div>
+	
+
+    <script src='http://api.tiles.mapbox.com/mapbox.js/v0.6.6/mapbox.js'></script>
+	<script type="text/javascript">
+		mapbox.auto('map', 'pnavarrc.map-me21qrt6');
+	</script>
+
+	<script src="../js/jquery.min.js"></script>
+	<script src="../js/bootstrap-tab.js"></script>
+</body>
