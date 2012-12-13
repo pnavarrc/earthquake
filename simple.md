@@ -171,6 +171,8 @@ title: Earthquakes in Chile
         {lat: -55.00, lon: -85.00}
       ]);
       map.zoom(3);
+      map.ui.attribution.add()
+      .content('<a href="http://mapbox.com/about/maps">Terms &amp; Feedback</a>');
                 
       map.addLayer(earthquakeLayer);
     });

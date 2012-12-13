@@ -1,6 +1,9 @@
 body {
-  background-color: #424242;
-  color: #aaaaaa;
+  background-color: #ffffff;
+  color: #2e3436;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 20px;
 }
 
 #map { 
