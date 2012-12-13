@@ -167,10 +167,10 @@ title: Earthquakes in Chile
       earthquakeLayer = d3layer().data(featureCollection);
       map = mapbox.map("map", o.layer, null, []);
       map.setExtent([
-        {lat:  15.00, lon: -30.00},
-        {lat: -55.00, lon: -85.00}
+        {lat: -10.00, lon: -70.00},
+        {lat: -60.00, lon: -100.00}
       ]);
-      map.zoom(3);
+      map.zoom(4);
       map.ui.attribution.add()
       .content('<a href="http://mapbox.com/about/maps">Terms &amp; Feedback</a>');
                 
