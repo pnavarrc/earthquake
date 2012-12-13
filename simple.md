@@ -61,7 +61,7 @@ title: Earthquakes in Chile
     
     var pointFeatures = featureCollection.features,
         numPoints = pointFeatures.length,
-        totalDuration = 60 * 1000,
+        totalDuration = 120 * 1000,
         lastDay = pointFeatures[numPoints - 1].properties.day,
         dayDuration = Math.floor(totalDuration / lastDay);
 
