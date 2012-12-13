@@ -1,18 +1,10 @@
 ---
-layout: default
+layout: datavis
 title: Earthquakes in Chile
 ---
 
-<!-- Content -->
-<div class="container-fluid">
-  <div class="span4">
-    Earthquakes in Chile since 1900.
-  </div>
-  <div class="span8">
-    <div id="map"></div>
-    <div id="d3layer" class="d3-vec"></div>
-  </div>
-</div>
+<div id="map"></div>
+<div id="d3layer" class="d3-vec"></div>
 
 <script src="../js/d3.v2.js"></script>
 <script src='http://api.tiles.mapbox.com/mapbox.js/v0.6.6/mapbox.js'></script>
@@ -39,7 +31,7 @@ title: Earthquakes in Chile
     });
   }
 
-  d3.json("data/full.json", function(featureCollection) {
+  d3.json("../data/full.json", function(featureCollection) {
     
     // Visualization variables
     var div,
@@ -125,7 +117,8 @@ title: Earthquakes in Chile
           .each("end", function() {
             d3.select(this).attr("fill-opacity", 0.0);
           })
-          .attr("d", path);
+          .attr("d", path)
+          .remove();
       }
 
       layer.draw = function() {
@@ -182,8 +175,6 @@ title: Earthquakes in Chile
       map.addLayer(earthquakeLayer);
     });
   });
-
-   
 </script>
 
 
