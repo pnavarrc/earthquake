@@ -117,8 +117,7 @@ title: Earthquakes in Chile
           .each("end", function() {
             d3.select(this).attr("fill-opacity", 0.0);
           })
-          .attr("d", path)
-          .remove();
+          .attr("d", path);
       }
 
       layer.draw = function() {
@@ -178,5 +177,7 @@ title: Earthquakes in Chile
     });
   });
 </script>
+
+
 
 
