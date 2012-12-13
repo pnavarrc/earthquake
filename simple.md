@@ -33,10 +33,11 @@ title: Earthquakes in Chile
 
   d3.json("../data/full.json", function(featureCollection) {
     
-    // Visualization variables
     var div,
         svg,
         grp,
+        grpYear,
+        yearRect,
         txtYear,
         txtPlay;
 
@@ -45,12 +46,22 @@ title: Earthquakes in Chile
     svg = div.append("svg"),
     grp = svg.append("g");
 
-    txtYear = svg.append("text")
+    var grpYear = svg.append("g")
+      .attr("transform", "translate(770, 510)");
+
+    yearRect = grpYear.append("rect")
+      .attr("id", "year-label")
+      .attr("x", 0)
+      .attr("y", 0)
+      .attr("width",  220)
+      .attr("height", 100);
+
+    txtYear = grpYear.append("text")
       .text("1900")
-      .attr("x",  30)
+      .attr("x",  40)
       .attr("y", 100)
-      .attr("class", "year")
-      .attr("font-size", "50"),
+      .attr("class", "year");
+
     txtPlay = svg.append("text")
       .text("PLAY ▶")
       .attr("x", 30)
@@ -109,8 +120,7 @@ title: Earthquakes in Chile
             return Math.floor(100 * d.properties.magnitude);
           })
           .each("start", function() {
-            txtYear.text(this.__data__.properties.year)
-              .attr("font-size", "50");
+            txtYear.text(this.__data__.properties.year);
             d3.select(this).attr("class", "eqpoint")
               .attr("fill-opacity", 0.2);
           })
