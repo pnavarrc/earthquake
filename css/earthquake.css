@@ -1,26 +1,19 @@
 html, body {
- margin: 0px;
- padding: 0px;
- border: 0px;
- }
-
-body {
-  background-color: #ffffff;
-  color: #2e3436;
+  margin:  0px;
+  padding: 0px;
+  border:  0px;
+  background-color: #191919;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 14px;
+  color: #2e3436;
   line-height: 20px;
-}
-
-h1 {
-  color: #babdb6;
-}
+ }
 
 #map { 
   position: absolute; 
   top: 0; 
   bottom: 0; 
-  width: 100%; 
+  width: 1020px; 
 }
 
 .d3-vec {

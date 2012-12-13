@@ -117,8 +117,7 @@ title: Earthquakes in Chile
           .each("end", function() {
             d3.select(this).attr("fill-opacity", 0.0);
           })
-          .attr("d", path)
-          .remove();
+          .attr("d", path);
       }
 
       layer.draw = function() {
@@ -179,8 +178,6 @@ title: Earthquakes in Chile
   });
 </script>
 
-<div id="title">
-  <h1>Earthquakes in Chile since 1900</h1>
-</div>
+
 
 
