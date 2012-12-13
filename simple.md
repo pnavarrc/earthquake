@@ -179,4 +179,8 @@ title: Earthquakes in Chile
   });
 </script>
 
+<div id="title">
+  <h1>Earthquakes in Chile since 1900</h1>
+</div>
+
 
