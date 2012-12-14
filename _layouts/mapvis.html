@@ -18,7 +18,7 @@
 	<div class="row-fluid">
 
 	  <!-- Sidebar -->
-	  <div id="sidebar" class="span4 sidebar">
+	  <div id="sidebar" class="span4">
 
 	  	<div class="introduction">
 	  		<h1 class="heading">{{ page.title }}</h1>
@@ -33,7 +33,7 @@
 		    <div class="tab-pane active" id="tab-about">
 		      <address>
 			    <strong>Pablo Navarro Castillo</strong><br>
-			    <a href="mailto:#">pnavarrc@gmail.com</a>
+			    <a href="mailto:pnavarrc@gmail.com">pnavarrc@gmail.com</a>
 			  </address>
 		    </div>
 		    <div class="tab-pane" id="tab-data">
@@ -41,16 +41,28 @@
 		    </div>
 		  </div>
 		</div>
+
 	  </div>
 
 	  <!-- Map -->
-	  <div id="map" class="map"></div>
+	  <div id="map" class="span8"></div>
+
 	</div>
-	
+
 
     <script src='http://api.tiles.mapbox.com/mapbox.js/v0.6.6/mapbox.js'></script>
 	<script type="text/javascript">
-		mapbox.auto('map', 'pnavarrc.map-me21qrt6');
+
+    mapbox.load('pnavarrc.map-me21qrt6', function(o) {
+
+      map = mapbox.map("map", o.layer);
+      map.setExtent([
+        {lat: -10.00, lon: -70.00},
+        {lat: -60.00, lon: -100.00}
+      ]);
+      map.zoom(4);
+
+    });
 	</script>
 
 	<script src="../js/jquery.min.js"></script>
