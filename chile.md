@@ -8,8 +8,8 @@ layout: mapvis
 
   var mapconf = {
       extent: [
-	    {lat: -10.00, lon:  -70.00},
-        {lat: -60.00, lon: -100.00}
+	    {lat: -10.00, lon: -45.00},
+        {lat: -60.00, lon: -75.00}
   	  ],
       zoom: 4,
       mapid: "pnavarrc.map-me21qrt6"
@@ -18,7 +18,16 @@ layout: mapvis
       duration: 2 * 60 * 1000, // Milliseconds
    	  radExp: 5,
    	  radExtent: [20, 300],
-   	  durationEntent: [300, 1000]
+   	  durationEntent: [300, 1000],
+   	  infoBox: {
+   	  	width:  200,
+   	  	height: 100,
+   	  	margin: 40
+   	  },
+   	  txtInfo: {
+   	  	margin: {top: 80, left: 0},
+   	  	fontsize: 50
+   	  }
    	};
 
   var magExtent, dayExtent;
@@ -26,7 +35,10 @@ layout: mapvis
   // Visualization setup
   var visDiv = d3.select('#d3l'),
    	  visSvg = visDiv.append('svg')
-   	  visGrp = visSvg.append('g');
+   	  visGrp = visSvg.append('g'),
+   	  grpYear = visSvg.append('g'),
+   	  infoBox = grpYear.append('rect'),
+   	  txtYear = grpYear.append('text');
 
   // D3 Visualization Layer
   function D3Layer() {
@@ -48,11 +60,30 @@ layout: mapvis
 
    	  if (firstDraw) {
 
-   	  	var btnPlay = d3.select('#btnPlay')
-   	  		.on('click', layer.drawPoints);
+   	  	var mapDim = layer.map.dimensions,
+		    btnPlay = d3.select('#btnPlay')
+   	  		  .on('click', layer.drawPoints);
 
-   	  	visSvg.attr('width',  layer.map.dimensions.x)
-   	  	      .attr('height', layer.map.dimensions.y);
+   	  	visSvg.attr('width',  mapDim.x)
+   	  	      .attr('height', mapDim.y);
+
+   	  	var infoPos = {
+			  x: mapDim.x - visconf.infoBox.width - visconf.infoBox.margin,
+   	  		  y: mapDim.y - visconf.infoBox.height - visconf.infoBox.margin
+   	  		};
+
+		grpYear.attr("transform", "translate(" + infoPos.x + "," + infoPos.y + ")");
+
+		infoBox.attr('id', 'infobox')
+   	  	  .attr('x', 0)
+   	  		  .attr('y', 0)
+   	  		  .attr('width',  visconf.infoBox.width)
+   	  		  .attr('height', visconf.infoBox.height);
+
+   	  	txtYear.attr('id', 'txtyear')
+   	  	  .attr('x', visconf.txtInfo.margin.left)
+   	  	  .attr('y', visconf.txtInfo.margin.top)
+   	  	  .text('1900');
 
    	  	firstDraw = false;
    	  }
@@ -91,7 +122,8 @@ layout: mapvis
         	return eqDuration(item.properties.magnitude);
         })
         .each('start', function() {
-          d3.select(this).attr('fill-opacity', 0.2);	
+          d3.select(this).attr('fill-opacity', 0.2);
+          txtYear.text(this.__data__.properties.year);
         })
         .each('end', function() {
           d3.select(this).attr("fill-opacity", 0.0);
