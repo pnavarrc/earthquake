@@ -1,0 +1,94 @@
+{
+  "features": [
+    {
+      "geometry": {
+        "coordinates": [
+          -69.1, 
+          -32.099
+        ], 
+        "type": "Point"
+      }, 
+      "properties": {
+        "datetime": "8/12/1903 23:00:01", 
+        "depth": 70, 
+        "magnitude": 6.0
+      }, 
+      "type": "Feature"
+    }, 
+    {
+      "geometry": {
+        "coordinates": [
+          -72.0, 
+          -33.0
+        ], 
+        "type": "Point"
+      }, 
+      "properties": {
+        "datetime": "8/17/1906 00:40:01", 
+        "depth": 25, 
+        "magnitude": 8.2
+      }, 
+      "type": "Feature"
+    }, 
+    {
+      "geometry": {
+        "coordinates": [
+          -64.5, 
+          -30.5
+        ], 
+        "type": "Point"
+      }, 
+      "properties": {
+        "datetime": "9/22/1908 17:00:01", 
+        "depth": 100, 
+        "magnitude": 6.5
+      }, 
+      "type": "Feature"
+    }, 
+    {
+      "geometry": {
+        "coordinates": [
+          -64.0, 
+          -20.0
+        ], 
+        "type": "Point"
+      }, 
+      "properties": {
+        "datetime": "5/17/1909 8:02:54", 
+        "depth": 250, 
+        "magnitude": 7.1
+      }, 
+      "type": "Feature"
+    }, 
+    {
+      "geometry": {
+        "coordinates": [
+          -70.5, 
+          -26.5
+        ], 
+        "type": "Point"
+      }, 
+      "properties": {
+        "datetime": "6/8/1909 5:46:30", 
+        "depth": -1, 
+        "magnitude": 7.6
+      }, 
+      "type": "Feature"
+    }, 
+    {
+      "geometry": {
+        "coordinates": [
+          -66.35, 
+          -17.43
+        ], 
+        "type": "Point"
+      }, 
+      "properties": {
+        "datetime": "7/23/1909 12:15:01", 
+        "depth": -1, 
+        "magnitude": 4.8
+      }, 
+      "type": "Feature"
+    }],    
+  "type": "FeatureCollection"
+}

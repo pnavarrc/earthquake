@@ -31,7 +31,7 @@ title: Earthquakes in Chile
     });
   }
 
-  d3.json("../data/full.json", function(featureCollection) {
+  d3.json("../data/sample.json", function(featureCollection) {
     
     var div,
         svg,

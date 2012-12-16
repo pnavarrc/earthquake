@@ -22,16 +22,24 @@
 
 	  	<div class="introduction">
 	  		<h1 class="heading">{{ page.title }}</h1>
+	  		<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
+	  		Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
+	  		when an unknown printer took a galley of type and scrambled it to make a type 
+	  		specimen book.</p>
+
+	  		<form class="inline-form">
+	  			<button id="btnPlay" class="btn btn-info" type="button">Play</button>
+	  		</form>
 	  	</div>
 
 	  	<div class="tabbable">
 		  <ul class="nav nav-tabs">
 		    <li class="active"><a href="#tab-about" data-toggle="tab">About</a></li>
-		    <li><a href="#tab-data" data-toggle="tab">Data</a></li>
+		    <li><a href="#tab-data"  data-toggle="tab">Data</a></li>
 		  </ul>
 		  <div class="tab-content">
-		    <div class="tab-pane active" id="tab-about">
 
+		    <div class="tab-pane active" id="tab-about">
 			  <dl>
 			  	<dt>Maps</dt>
 			  	<dd>The mapping libraries and tiles are provided by 
@@ -65,24 +73,13 @@
 
 	  <!-- Map -->
 	  <div id="map" class="span8"></div>
+	  <div id="d3l"></div>
 
 	</div>
 
 
     <script src='http://api.tiles.mapbox.com/mapbox.js/v0.6.6/mapbox.js'></script>
-	<script type="text/javascript">
-
-    mapbox.load('pnavarrc.map-me21qrt6', function(o) {
-
-      map = mapbox.map("map", o.layer);
-      map.setExtent([
-        {lat: -10.00, lon: -70.00},
-        {lat: -60.00, lon: -100.00}
-      ]);
-      map.zoom(4);
-
-    });
-	</script>
+	{{ content }}
 
 	<script src="../js/jquery.min.js"></script>
 	<script src="../js/bootstrap-tab.js"></script>

@@ -12,3 +12,12 @@ h1.heading {
 	height: 660px;
 }
 
+#d3l {
+	position: absolute;
+	margin-top:  0px;
+	margin-left: 0px;
+}
+
+.eqpoint {
+	fill: rgb(0, 180, 204);
+}
