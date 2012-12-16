@@ -27,7 +27,11 @@ layout: mapvis
    	  txtInfo: {
    	  	margin: {top: 80, left: 0},
    	  	fontsize: 50
-   	  }
+   	  },
+   	  colorExtent: [
+   	  	d3.rgb('#edd300'),
+   	  	d3.rgb('#cc0001')
+   	  ]
    	};
 
   var magExtent, dayExtent;
@@ -100,7 +104,11 @@ layout: mapvis
 	  	  	.rangeRound([0, visconf.duration]),
 	  	  eqDuration = d3.scale.linear()
 	  	  	.domain(magExtent)
-	  	  	.range(visconf.durationEntent);
+	  	  	.range(visconf.durationEntent),
+	  	  eqColor = d3.scale.pow()
+	  	    .domain(magExtent)
+	  	    .range(visconf.colorExtent)
+	  	    .exponent(visconf.radExp);
 
    	  path = d3.geo.path()
         .projection(layer.project)
@@ -122,7 +130,11 @@ layout: mapvis
         	return eqDuration(item.properties.magnitude);
         })
         .each('start', function() {
-          d3.select(this).attr('fill-opacity', 0.2);
+          d3.select(this)
+            .attr('fill', function() {
+            	return eqColor(this.__data__.properties.magnitude);
+            })
+            .attr('fill-opacity', 0.2);
           txtYear.text(this.__data__.properties.year);
         })
         .each('end', function() {
@@ -138,8 +150,7 @@ layout: mapvis
    	  feature = visGrp.selectAll('path')
    	    .data(collection.features)
    	    .enter()
-   	  	.append('path')
-   	  	.attr('class', 'eqpoint');
+   	  	.append('path');
 
    	  return layer;
    	};
