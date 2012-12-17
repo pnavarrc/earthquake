@@ -1,189 +1,214 @@
 ---
-layout: default
-title: Earthquakes in Chile
+title: Earthquakes in Chile since 1900
+layout: mapvis
 ---
 
-<!-- Content -->
-<div class="container-fluid">
-  <div class="span4">
-    Earthquakes in Chile since 1900.
-  </div>
-  <div class="span8">
-    <div id="map"></div>
-    <div id="d3layer" class="d3-vec"></div>
-  </div>
-</div>
-
 <script src="../js/d3.v2.js"></script>
-<script src='http://api.tiles.mapbox.com/mapbox.js/v0.6.6/mapbox.js'></script>
 <script type="text/javascript">
 
-  var MS_BY_DAY = 24 * 60 * 60 * 1000,
-      data = {};
+  var mapconf = {
+      extent: [
+	    {lat: -10.00, lon: -45.00},
+        {lat: -60.00, lon: -75.00}
+  	  ],
+      zoom: 4,
+      mapid: "pnavarrc.map-me21qrt6"
+  	},
+    visconf = {
+      duration: 2 * 60 * 1000,
+   	  radExp: 5,
+   	  radExtent: [20, 300],
+   	  durationEntent: [300, 1000],
+   	  infoBox: {
+   	  	width:  200,
+   	  	height: 100,
+   	  	margin: 40
+   	  },
+   	  txtInfo: {
+   	  	margin: {top: 80, left: 0},
+   	  	fontsize: 50
+   	  },
+   	  colorExtent: [
+   	  	d3.rgb('#fce94f'),
+   	  	d3.rgb('#cc0001')
+   	  ]
+   	};
 
-  function epochDay(datetime) {
-    var epochms = Date.parse(datetime);
-    return (epochms - epochms % MS_BY_DAY) / MS_BY_DAY;
-  }
+  var magExtent, dayExtent;
 
-  function addEarthquakeMetadata(featureCollection) {
+  // Visualization setup
+  var visDiv = d3.select('#d3l'),
+   	  visSvg = visDiv.append('svg')
+   	  visGrp = visSvg.append('g'),
+   	  grpYear = visSvg.append('g'),
+   	  infoBox = grpYear.append('rect'),
+   	  txtYear = grpYear.append('text');
 
-    var pointFeatures = featureCollection.features,
-        firstItem = pointFeatures[0],
-        offsetDay = Math.abs(epochDay(firstItem.properties.datetime));
+  // D3 Visualization Layer
+  function D3Layer() {
 
-    pointFeatures.forEach(function(item) {
-      var date = new Date(item.properties.datetime);
-      item.properties["day"] = epochDay(item.properties.datetime) + offsetDay;
-      item.properties["year"] = date.getFullYear();
-    });
-  }
+    var layer = {},
+   	  	bounds,
+   	  	feature,
+   	  	collection,
+   	  	firstDraw = true;
 
-  d3.json("data/full.json", function(featureCollection) {
-    
-    // Visualization variables
-    var div,
-        svg,
-        grp,
-        txtYear,
-        txtPlay;
+   	layer.parent = visDiv.node();
 
-    // Visualization setup
-    div = d3.select("#d3layer"),
-    svg = div.append("svg"),
-    grp = svg.append("g");
+   	layer.project = function(coord) {
+   	  var svgPoint = layer.map.locationPoint({ lat: coord[1], lon: coord[0] });
+   	  return [svgPoint.x, svgPoint.y];
+   	};
 
-    txtYear = svg.append("text")
-      .text("1900")
-      .attr("x",  30)
-      .attr("y", 100)
-      .attr("class", "year")
-      .attr("font-size", "50"),
-    txtPlay = svg.append("text")
-      .text("PLAY ▶")
-      .attr("x", 30)
-      .attr("y", 130)
-      .attr("class", "playout");
+   	layer.draw = function() {
 
-    addEarthquakeMetadata(featureCollection);
-    
-    var pointFeatures = featureCollection.features,
-        numPoints = pointFeatures.length,
-        totalDuration = 60 * 1000,
-        lastDay = pointFeatures[numPoints - 1].properties.day,
-        dayDuration = Math.floor(totalDuration / lastDay);
+   	  if (firstDraw) {
 
-    function setup_svg(width, height) {
-      svg.attr("width", width)
-        .attr("height", height)
-        .style("margin-left", "0px")
-        .style("margin-top",  "0px");
-    }
+   	  	var mapDim = layer.map.dimensions,
+		    btnPlay = d3.select('#btnPlay')
+   	  		  .on('click', layer.drawPoints);
 
-    function d3layer() {
+   	  	visSvg.attr('width',  mapDim.x)
+   	  	      .attr('height', mapDim.y);
 
-      var layer = {},
-        bounds,
-        feature,
-        collection,
-        first = true;
+   	  	var infoPos = {
+			  x: mapDim.x - visconf.infoBox.width - visconf.infoBox.margin,
+   	  		  y: mapDim.y - visconf.infoBox.height - visconf.infoBox.margin
+   	  		};
+
+		grpYear.attr("transform", "translate(" + infoPos.x + "," + infoPos.y + ")");
+
+		infoBox.attr('id', 'infobox')
+   	  	  .attr('x', 0)
+   	  		  .attr('y', 0)
+   	  		  .attr('width',  visconf.infoBox.width)
+   	  		  .attr('height', visconf.infoBox.height);
+
+   	  	txtYear.attr('id', 'txtyear')
+   	  	  .attr('x', visconf.txtInfo.margin.left)
+   	  	  .attr('y', visconf.txtInfo.margin.top)
+   	  	  .text('1900');
+
+   	  	firstDraw = false;
+   	  }
+   	};
+
+	layer.drawPoints = function() {
+
+	  var eqRadius = d3.scale.pow()
+	  	    .domain(magExtent)
+	  	    .rangeRound(visconf.radExtent)
+	  	    .exponent(visconf.radExp),
+	  	  eqDelay = d3.scale.linear()
+	  	  	.domain(dayExtent)
+	  	  	.rangeRound([0, visconf.duration]),
+	  	  eqDuration = d3.scale.linear()
+	  	  	.domain(magExtent)
+	  	  	.range(visconf.durationEntent),
+	  	  eqColor = d3.scale.linear()
+	  	    .domain(magExtent)
+	  	    .range(visconf.colorExtent);
+
+   	  path = d3.geo.path()
+        .projection(layer.project)
+        .pointRadius(0);
+
+      feature.attr("d", path);
+
+   	  path = d3.geo.path()
+        .projection(layer.project)
+        .pointRadius(function(item) { 
+        	return eqRadius(item.properties.magnitude); 
+        });
         
-      layer.parent = div.node();
-
-      layer.project = function(x) {
-        var point = layer.map.locationPoint({ lat: x[1], lon: x[0] });
-        return [point.x, point.y];
-      }
-
-      layer.draw_earthquakes = function() {
-
-        path = d3.geo.path()
-            .projection(layer.project)
-            .pointRadius(0);
-
-        feature.attr("d", path);                   
-
-        path = d3.geo.path()
-          .projection(layer.project)
-          .pointRadius(function(d) {
-            return 1 + Math.floor(0.4 * Math.pow(2, d.properties.magnitude));
-          });
-
-        feature.transition()
-          .delay(function(d) {
-            return d.properties.day;
-          })
-          .duration(function(d) { 
-            return Math.floor(100 * d.properties.magnitude);
-          })
-          .each("start", function() {
-            txtYear.text(this.__data__.properties.year)
-              .attr("font-size", "50");
-            d3.select(this).attr("class", "eqpoint")
-              .attr("fill-opacity", 0.2);
-          })
-          .each("end", function() {
-            d3.select(this).attr("fill-opacity", 0.0);
-          })
-          .attr("d", path);
-      }
-
-      layer.draw = function() {
-
-        if (first) {
-          setup_svg(layer.map.dimensions.x, layer.map.dimensions.y);
-          txtPlay.on("click", layer.draw_earthquakes)
-            .on("mouseover", function() {
-              txtPlay.attr("class", "playover");
+      feature.transition()
+        .delay(function(item) {
+          return eqDelay(item.properties.day);
+        })
+        .duration(function(item) {
+        	return eqDuration(item.properties.magnitude);
+        })
+        .each('start', function() {
+          d3.select(this)
+            .attr('fill', function() {
+              var mag = this.__data__.properties.magnitude;
+              return eqColor(Math.floor(mag));
             })
-            .on("mouseout", function() {
-              txtPlay.attr("class", "playout");
-            });
-          first = false;
-        }
+            .attr('fill-opacity', 0.2);
+          txtYear.text(this.__data__.properties.year);
+        })
+        .each('end', function() {
+          d3.select(this).attr("fill-opacity", 0.0);
+        })
+        .attr('d', path);
 
-      };
+   	};
 
-      layer.data = function(x) {
+   	layer.data = function(x) {
+   	  collection = x,
+   	  bounds = d3.geo.bounds(collection),
+   	  feature = visGrp.selectAll('path')
+   	    .data(collection.features)
+   	    .enter()
+   	  	.append('path');
 
-          collection = x;
-          bounds = d3.geo.bounds(collection);
-          feature = grp.selectAll("path")
-            .data(collection.features)
-            .enter()
-            .append("path")
-            .attr("class", "eqpoint");
-    
-          return layer;
-        };
+   	  return layer;
+   	};
 
-        layer.extent = function() {
-          return new MM.Extent(
-            new MM.Location(bounds[0][1], bounds[0][0]),
-            new MM.Location(bounds[1][1], bounds[1][0]));
-        };
+   	layer.extent = function() {
+      return new MM.Extent(
+        new MM.Location(bounds[0][1], bounds[0][0]),
+        new MM.Location(bounds[1][1], bounds[1][0]));
+    };
 
-        return layer;
-      };
+  	return layer;
+  
+  };
 
-    var map,
-        earthquakeLayer;
+	function epochDay(datetime) {
+	  var MS_DAY = 24 * 60 * 60 * 1000,
+          ms_epoch = Date.parse(datetime);
+      return (ms_epoch - ms_epoch % MS_DAY) / MS_DAY;
+    };
 
-    mapbox.load('pnavarrc.map-me21qrt6', function(o) {
+  	// Load the data
+   	d3.json('../data/full.json', function(earthquakeData) {
 
-      earthquakeLayer = d3layer().data(featureCollection);
-      map = mapbox.map("map", o.layer, null, []);
-      map.setExtent([
-        {lat:  15.00, lon: -30.00},
-        {lat: -55.00, lon: -85.00}
-      ]);
-      map.zoom(3);
-                
-      map.addLayer(earthquakeLayer);
+   	  // Add additional data to the eartquake events
+      var earthquakePoints = earthquakeData.features, 
+          firstDate = earthquakePoints[0].properties.datetime,
+          dayOffset = Math.abs(epochDay(firstDate));
+
+      earthquakePoints.forEach(function(item) {
+      	var datetime = new Date(item.properties.datetime);
+      	item.properties['day'] = epochDay(datetime) + dayOffset;
+      	item.properties['year'] = datetime.getFullYear();
+      });
+
+	  magExtent = d3.extent(earthquakePoints, function(item) {
+      	    return item.properties.magnitude;
+          }),
+      	  dayExtent = d3.extent(earthquakePoints, function(item) {
+      	  	return item.properties.day;
+      	  });
+
+
+  	  // Load and draw the map
+  	  mapbox.load(mapconf.mapid, function(mbmap) {
+
+        map = mapbox.map("map", mbmap.layer);
+        earthquakeLayer = D3Layer().data(earthquakeData);
+		map.addLayer(earthquakeLayer);
+
+        // Configure the inital state of the map
+        map.setExtent(mapconf.extent);
+        map.zoom(mapconf.zoom);
+        map.ui.zoomer.add();
+        map.ui.attribution.add()
+          .content('<a href="http://mapbox.com/about/maps">Terms &amp; Feedback</a>');        
+	  });
+
     });
-  });
 
-   
+
 </script>
-
-
