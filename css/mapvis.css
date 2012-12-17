@@ -12,6 +12,10 @@ h1.heading {
 	height: 660px;
 }
 
+.intro {
+	color: #555753;
+}
+
 #d3l {
 	position: absolute;
 	margin-top:  0px;

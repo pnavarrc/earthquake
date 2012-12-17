@@ -15,7 +15,7 @@ layout: mapvis
       mapid: "pnavarrc.map-me21qrt6"
   	},
     visconf = {
-      duration: 2 * 60 * 1000, // Milliseconds
+      duration: 2 * 60 * 1000,
    	  radExp: 5,
    	  radExtent: [20, 300],
    	  durationEntent: [300, 1000],
@@ -29,7 +29,7 @@ layout: mapvis
    	  	fontsize: 50
    	  },
    	  colorExtent: [
-   	  	d3.rgb('#edd300'),
+   	  	d3.rgb('#fce94f'),
    	  	d3.rgb('#cc0001')
    	  ]
    	};
@@ -105,10 +105,9 @@ layout: mapvis
 	  	  eqDuration = d3.scale.linear()
 	  	  	.domain(magExtent)
 	  	  	.range(visconf.durationEntent),
-	  	  eqColor = d3.scale.pow()
+	  	  eqColor = d3.scale.linear()
 	  	    .domain(magExtent)
-	  	    .range(visconf.colorExtent)
-	  	    .exponent(visconf.radExp);
+	  	    .range(visconf.colorExtent);
 
    	  path = d3.geo.path()
         .projection(layer.project)
@@ -132,7 +131,8 @@ layout: mapvis
         .each('start', function() {
           d3.select(this)
             .attr('fill', function() {
-            	return eqColor(this.__data__.properties.magnitude);
+              var mag = this.__data__.properties.magnitude;
+              return eqColor(Math.floor(mag));
             })
             .attr('fill-opacity', 0.2);
           txtYear.text(this.__data__.properties.year);
