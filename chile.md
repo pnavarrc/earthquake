@@ -1,5 +1,5 @@
 ---
-title: Earthquake Map
+title: Earthquakes in Chile since 1900
 layout: mapvis
 ---
 
