@@ -3,7 +3,7 @@ title: Earthquakes in Chile since 1900
 layout: mapvis
 ---
 
-<script src="../js/d3.v2.js"></script>
+<script src="/earthquake/js/d3.v2.js"></script>
 <script type="text/javascript">
 
   var mapconf = {
