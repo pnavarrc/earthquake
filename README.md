@@ -13,7 +13,8 @@ Copyright 2012 Pablo Navarro.
 ### Maps
 
 The mapping libraries and tiles are provided byMapBox. Mapbox uses open data fromOpenStreepMap and its contributors.
-Earthquake Data
+
+### Earthquake Data
 
 The earthquake data was retrieved from the ANSS Composite Catalog and joined with the Centennial Catalog from the USGS. Thanks to the USGS, to the  Advanced National Seismic System (ANSS) for providing the catalog and to the Northern California Earthquake Data Center (NCEDC) and to the organizations that contributed the data to the NCEDC.
 
