@@ -172,7 +172,7 @@ layout: mapvis
     };
 
   	// Load the data
-   	d3.json('../data/full.json', function(earthquakeData) {
+   	d3.json('/../data/full.json', function(earthquakeData) {
 
    	  // Add additional data to the eartquake events
       var earthquakePoints = earthquakeData.features, 
