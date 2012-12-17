@@ -1,18 +1,32 @@
-body {
-  padding-top: 60px;
-  background-color: #424242;
-  color: #aaaaaa;
-}
+html, body {
+  margin:  0px;
+  padding: 0px;
+  border:  0px;
+  background-color: #191919;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  color: #2e3436;
+  line-height: 20px;
+ }
 
 #map { 
   position: absolute; 
   top: 0; 
   bottom: 0; 
-  width: 100%; 
+  width: 1020px; 
 }
 
-.d3-vec {
+.d3l {
   position: absolute;
+}
+
+#year-label {
+  background-color: #191919;
+  fill: #191919;
+  color: #303030;
+  font-family: "Verdana";
+  font-size: 90px;
+  opacity: 0.9;
 }
 
 .eqpoint {
@@ -32,6 +46,7 @@ body {
 
 .year {
   fill: rgb(60, 60, 60);
+  font-size: 70px;
   font-family: "Verdana";
-  font-size: "60";
+
 }

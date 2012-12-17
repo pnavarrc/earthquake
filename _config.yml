@@ -1,4 +1,6 @@
 safe: true
+source: .
+destination: _site
 auto: true
 lsi: false
 server: true

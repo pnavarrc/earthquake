@@ -1,0 +1,37 @@
+#sidebar {
+	padding-left:  10px;
+	padding-right: 10px;
+	background-color: #ffffff;
+}
+
+h1.heading {
+	font-size: 23px; 	
+}
+
+#map {
+	height: 660px;
+}
+
+.intro {
+	color: #555753;
+}
+
+#d3l {
+	position: absolute;
+	margin-top:  0px;
+	margin-left: 0px;
+}
+
+.eqpoint {
+	fill: rgb(0, 180, 204);
+}
+
+#infobox {
+	fill: #191919;
+	fill-opacity: 0.8;
+}
+
+#txtyear {
+	fill: #303030;
+	font-size: 80px;
+}
