@@ -1,6 +1,6 @@
 # Earthquakes in Chile since 1900
 
-![Earthquakes in Chile](img/screenshot.png)
+![Earthquakes in Chile](/earthquake/img/screenshot.png)
 
 This page allows to visualize the most important seismic events since 1900. The measurement process has improved over time, augmenting the quantity and quality of the earthquake records. The radius and the color of the circles maps to the earthquake magnitude. The interactive visualization:
 
