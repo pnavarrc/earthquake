@@ -8,7 +8,7 @@ layout: mapvis
 
   var mapconf = {
       extent: [
-	    {lat: -10.00, lon: -45.00},
+	      {lat: -10.00, lon: -45.00},
         {lat: -60.00, lon: -75.00}
   	  ],
       zoom: 4,
