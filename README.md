@@ -1,12 +1,10 @@
 # Earthquakes in Chile since 1900
 
-This page allows to visualize the most important seismic events since 1900. The measurement process has improved over time, augmenting the quantity and quality of the earthquake records. The radius and the color of the circles maps to the earthquake magnitude. 
+![Earthquakes in Chile](img/screenshot.png)
 
-## About
+This page allows to visualize the most important seismic events since 1900. The measurement process has improved over time, augmenting the quantity and quality of the earthquake records. The radius and the color of the circles maps to the earthquake magnitude. The interactive visualization:
 
-I am Data Engineer at Algometrics Hedge Fund. I like to create data visualizations with open source tools. I also like to create illustrations in watercolor. Please, feel free to contact me and send me suggestions. You can fork the code of this site in Github.
-
-Copyright 2012 Pablo Navarro.
+http://pnavarrc.github.com/earthquake/
 
 ## Data
 
