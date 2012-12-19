@@ -4,14 +4,15 @@
     <meta charset="utf-8">
     <title>{{ page.title }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="description" content="Earthquake Visualization">
+    <meta name="author" content="Pablo Navarro">
 
     <!-- Le styles -->
     <link href="/earthquake/css/bootstrap.css" rel="stylesheet">
     <link href="/earthquake/css/bootstrap-responsive.css" rel="stylesheet">
     <link href='http://api.tiles.mapbox.com/mapbox.js/v0.6.7/mapbox.css' rel='stylesheet' />
     <link href="/earthquake/css/mapvis.css" rel="stylesheet">
+
   	<script type="text/javascript">
   	  // Google Analytics snippet
 	  var _gaq = _gaq || [];
@@ -23,11 +24,10 @@
 	    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
 	    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 	  })();
+    </script>
 
-</script>
   </head>
   <body>
-
 
 	<div class="row-fluid">
 
@@ -97,10 +97,8 @@
 
 	</div>
 
-
     <script src='http://api.tiles.mapbox.com/mapbox.js/v0.6.6/mapbox.js'></script>
 	{{ content }}
-
 	<script src="/earthquake/js/jquery.min.js"></script>
 	<script src="/earthquake/js/bootstrap-tab.js"></script>
 </body>

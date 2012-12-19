@@ -25,7 +25,10 @@ layout: mapvis
    	  	margin: 40
    	  },
    	  txtInfo: {
-   	  	margin: {top: 80, left: 0},
+   	  	margin: {
+          top: 80, 
+          left: 0
+        },
    	  	fontsize: 50
    	  },
    	  colorExtent: [
@@ -72,14 +75,14 @@ layout: mapvis
    	  	      .attr('height', mapDim.y);
 
    	  	var infoPos = {
-			  x: mapDim.x - visconf.infoBox.width - visconf.infoBox.margin,
-   	  		  y: mapDim.y - visconf.infoBox.height - visconf.infoBox.margin
-   	  		};
+			    x: mapDim.x - visconf.infoBox.width - visconf.infoBox.margin,
+   	  	  y: mapDim.y - visconf.infoBox.height - visconf.infoBox.margin
+   	  	};
 
-		grpYear.attr("transform", "translate(" + infoPos.x + "," + infoPos.y + ")");
+		    grpYear.attr("transform", "translate(" + infoPos.x + "," + infoPos.y + ")");
 
-		infoBox.attr('id', 'infobox')
-   	  	  .attr('x', 0)
+		    infoBox.attr('id', 'infobox')
+   	  	    .attr('x', 0)
    	  		  .attr('y', 0)
    	  		  .attr('width',  visconf.infoBox.width)
    	  		  .attr('height', visconf.infoBox.height);
@@ -91,10 +94,13 @@ layout: mapvis
 
    	  	firstDraw = false;
    	  }
+
    	};
 
 	layer.drawPoints = function() {
 
+    // Create the scales for the radius, delay, duration
+    // and color
 	  var eqRadius = d3.scale.pow()
 	  	    .domain(magExtent)
 	  	    .rangeRound(visconf.radExtent)
@@ -192,13 +198,12 @@ layout: mapvis
       	  	return item.properties.day;
       	  });
 
-
   	  // Load and draw the map
   	  mapbox.load(mapconf.mapid, function(mbmap) {
 
         map = mapbox.map("map", mbmap.layer);
         earthquakeLayer = D3Layer().data(earthquakeData);
-		map.addLayer(earthquakeLayer);
+    		map.addLayer(earthquakeLayer);
 
         // Configure the inital state of the map
         map.setExtent(mapconf.extent);
@@ -208,7 +213,6 @@ layout: mapvis
           .content('<a href="http://mapbox.com/about/maps">Terms &amp; Feedback</a>');        
 	  });
 
-    });
-
+  });
 
 </script>
