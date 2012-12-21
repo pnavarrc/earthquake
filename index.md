@@ -1,9 +1,9 @@
 ---
 title: Earthquakes in Chile since 1900
-layout: mapvis
+layout: debug
 ---
 
-<script src="/earthquake/js/d3.v2.min.js"></script>
+<script src="../js/d3.v2.min.js"></script>
 <script type="text/javascript">
 
   var mapconf = {
@@ -37,8 +37,6 @@ layout: mapvis
    	  ]
    	};
 
-  var magExtent, dayExtent;
-
   // Visualization setup
   var visDiv = d3.select('#d3l'),
    	  visSvg = visDiv.append('svg')
@@ -54,8 +52,14 @@ layout: mapvis
    	  	bounds,
    	  	feature,
    	  	collection,
-   	  	firstDraw = true;
-
+   	  	firstDraw = true,
+        magExtent, 
+        dayExtent,
+        eqRadius,
+        eqDelay,
+        eqDuration,
+        eqColor;
+        
    	layer.parent = visDiv.node();
 
    	layer.project = function(coord) {
@@ -99,55 +103,38 @@ layout: mapvis
 
 	layer.drawPoints = function() {
 
-    // Create the scales for the radius, delay, duration
-    // and color
-	  var eqRadius = d3.scale.pow()
-	  	    .domain(magExtent)
-	  	    .rangeRound(visconf.radExtent)
-	  	    .exponent(visconf.radExp),
-	  	  eqDelay = d3.scale.linear()
-	  	  	.domain(dayExtent)
-	  	  	.rangeRound([10, visconf.duration]),
-	  	  eqDuration = d3.scale.linear()
-	  	  	.domain(magExtent)
-	  	  	.rangeRound(visconf.durationEntent),
-	  	  eqColor = d3.scale.linear()
-	  	    .domain(magExtent)
-	  	    .range(visconf.colorExtent);
+   	path = d3.geo.path()
+      .projection(layer.project)
+      .pointRadius(0);
 
-   	  path = d3.geo.path()
-        .projection(layer.project)
-        .pointRadius(0);
+    feature.attr("d", path);
 
-      feature.attr("d", path);
-
-   	  path = d3.geo.path()
-        .projection(layer.project)
-        .pointRadius(function(item) { 
-        	return eqRadius(item.properties.magnitude); 
-        });
+   	path = d3.geo.path()
+      .projection(layer.project)
+      .pointRadius(function(item) { 
+      	return eqRadius(item.properties.magnitude); 
+      });
         
-      feature.transition()
-        .delay(function(item) {
-          return eqDelay(item.properties.day);
-        })
-        .duration(function(item) {
-        	return eqDuration(item.properties.magnitude);
-        })
-        .each('start', function() {
-          d3.select(this)
-            .attr('fill', function() {
-              var mag = this.__data__.properties.magnitude;
-              return eqColor(Math.floor(mag));
-            })
-            .attr('fill-opacity', 0.2);
-          txtYear.text(this.__data__.properties.year);
-        })
-        .each('end', function() {
-          d3.select(this).attr("fill-opacity", 0.0);
-        })
-        .attr('d', path);
-
+    feature.transition()
+      .delay(function(item) {
+        return eqDelay(item.properties.day);
+      })
+      .duration(function(item) {
+      	return eqDuration(item.properties.magnitude);
+      })
+      .each('start', function() {
+        d3.select(this)
+          .attr('fill', function() {
+            var mag = this.__data__.properties.magnitude;
+            return eqColor(Math.floor(mag));
+          })
+          .attr('fill-opacity', 0.2);
+        txtYear.text(this.__data__.properties.year);
+      })
+      .each('end', function() {
+        d3.select(this).attr("fill-opacity", 0.0);
+      })
+      .attr('d', path);
    	};
 
    	layer.data = function(x) {
@@ -157,6 +144,29 @@ layout: mapvis
    	    .data(collection.features)
    	    .enter()
    	  	.append('path');
+
+      // Compute the data extent
+      magExtent = d3.extent(collection.features, function(item) {
+          return item.properties.magnitude;
+        }),
+      dayExtent = d3.extent(collection.features, function(item) {
+          return item.properties.day;
+        });
+
+      // Compute the delay, color, radius and duration scales
+      eqRadius = d3.scale.pow()
+        .domain(magExtent)
+        .rangeRound(visconf.radExtent)
+        .exponent(visconf.radExp),
+      eqDelay = d3.scale.linear()
+        .domain(dayExtent)
+        .rangeRound([10, visconf.duration]),
+      eqDuration = d3.scale.linear()
+        .domain(magExtent)
+        .rangeRound(visconf.durationEntent),
+      eqColor = d3.scale.linear()
+        .domain(magExtent)
+        .range(visconf.colorExtent);
 
    	  return layer;
    	};
@@ -178,7 +188,7 @@ layout: mapvis
     };
 
   	// Load the data
-   	d3.json('/earthquake/data/full.json', function(earthquakeData) {
+   	d3.json('../data/full.json', function(earthquakeData) {
 
    	  // Add additional data to the eartquake events
       var earthquakePoints = earthquakeData.features, 
@@ -190,13 +200,6 @@ layout: mapvis
       	item.properties['day'] = epochDay(datetime) + dayOffset;
       	item.properties['year'] = datetime.getFullYear();
       });
-
-	  magExtent = d3.extent(earthquakePoints, function(item) {
-      	    return item.properties.magnitude;
-          }),
-      	  dayExtent = d3.extent(earthquakePoints, function(item) {
-      	  	return item.properties.day;
-      	  });
 
   	  // Load and draw the map
   	  mapbox.load(mapconf.mapid, function(mbmap) {
