@@ -37,8 +37,6 @@ layout: mapvis
    	  ]
    	};
 
-  var 
-
   // Visualization setup
   var visDiv = d3.select('#d3l'),
    	  visSvg = visDiv.append('svg')
