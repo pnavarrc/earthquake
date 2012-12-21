@@ -1,9 +1,9 @@
 ---
 title: Earthquakes in Chile since 1900
-layout: mapvis
+layout: debug
 ---
 
-<script src="/earthquake/js/d3.v2.min.js"></script>
+<script src="../js/d3.v2.min.js"></script>
 <script type="text/javascript">
 
   var mapconf = {
@@ -188,7 +188,7 @@ layout: mapvis
     };
 
   	// Load the data
-   	d3.json('/earthquake/data/full.json', function(earthquakeData) {
+   	d3.json('../data/full.json', function(earthquakeData) {
 
    	  // Add additional data to the eartquake events
       var earthquakePoints = earthquakeData.features, 
