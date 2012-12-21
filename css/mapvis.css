@@ -28,10 +28,10 @@ h1.heading {
 
 #infobox {
 	fill: #1a1a1a;
-	fill-opacity: 0.8;
+	fill-opacity: 0.9;
 }
 
 #txtyear {
-	fill: #303030;
+	fill: #343434;
 	font-size: 80px;
 }
