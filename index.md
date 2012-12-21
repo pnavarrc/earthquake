@@ -12,7 +12,7 @@ layout: mapvis
         {lat: -60.00, lon: -75.00}
   	  ],
       zoom: 4,
-      mapid: "pnavarrc.map-me21qrt6"
+      mapid: "pnavarrc.earthquakemap"
   	},
     visconf = {
       duration: 2 * 60 * 1000,
