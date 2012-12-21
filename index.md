@@ -107,10 +107,10 @@ layout: mapvis
 	  	    .exponent(visconf.radExp),
 	  	  eqDelay = d3.scale.linear()
 	  	  	.domain(dayExtent)
-	  	  	.rangeRound([0, visconf.duration]),
+	  	  	.rangeRound([10, visconf.duration]),
 	  	  eqDuration = d3.scale.linear()
 	  	  	.domain(magExtent)
-	  	  	.range(visconf.durationEntent),
+	  	  	.rangeRound(visconf.durationEntent),
 	  	  eqColor = d3.scale.linear()
 	  	    .domain(magExtent)
 	  	    .range(visconf.colorExtent);
