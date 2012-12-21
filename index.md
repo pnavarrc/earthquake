@@ -201,7 +201,7 @@ layout: mapvis
   	  // Load and draw the map
   	  mapbox.load(mapconf.mapid, function(mbmap) {
 
-        map = mapbox.map("map", mbmap.layer);
+        map = mapbox.map("map", mbmap.layer, null, []);
         earthquakeLayer = D3Layer().data(earthquakeData);
     		map.addLayer(earthquakeLayer);
 
