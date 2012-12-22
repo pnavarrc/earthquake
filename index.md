@@ -1,6 +1,6 @@
 ---
 title: Earthquakes in Chile since 1900
-layout: debug
+layout: mapvis
 ---
 
 <script src="js/d3.v2.min.js"></script>
