@@ -7,10 +7,10 @@
     <meta name="author" content="Pablo Navarro">
 
     <!-- Le styles -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link href="{{ site.url }}/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ site.url }}/css/bootstrap-responsive.min.css" rel="stylesheet">
     <link href='http://api.tiles.mapbox.com/mapbox.js/v0.6.7/mapbox.css' rel='stylesheet' />
-    <link href="css/mapvis.css" rel="stylesheet">
+    <link href="{{ site.url }}/css/mapvis.css" rel="stylesheet">
 
   	<script type="text/javascript">
   	  // Google Analytics snippet
@@ -48,7 +48,7 @@
 	  	<div class="tabbable">
 		  <ul class="nav nav-tabs">
 		    <li class="active"><a href="#tab-about" data-toggle="tab">About</a></li>
-		    <li><a href="#tab-data"  data-toggle="tab">Data</a></li>
+		    <li><a href="#tab-data" data-toggle="tab">Data</a></li>
 		  </ul>
 		  <div class="tab-content">
 
@@ -98,6 +98,6 @@
 
     <script src='http://api.tiles.mapbox.com/mapbox.js/v0.6.6/mapbox.js'></script>
 	{{ content }}
-	<script src="js/jquery.min.js"></script>
-	<script src="js/bootstrap-tab.js"></script>
+	<script src="{{ site.url }}/js/jquery.min.js"></script>
+	<script src="{{ site.url }}/js/bootstrap-tab.js"></script>
 </body>
