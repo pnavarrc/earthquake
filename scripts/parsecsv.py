@@ -1,5 +1,6 @@
 import argparse
 import csv
+import dateutil.parser
 import json
 
 class CSVReader(object):
@@ -43,7 +44,7 @@ if __name__ == '__main__':
             "type": "Feature",
             "properties": {
                 "magnitude": float(item["Magnitude"]),
-                "datetime": item["DateTime"],
+                "datetime": dateutil.parser.parse(item["DateTime"]).isoformat(),
                 "depth": float(item["Depth"])
             },
             "geometry": {

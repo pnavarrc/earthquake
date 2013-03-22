@@ -7,3 +7,4 @@ server: true
 markdown: rdiscount
 pygments: true
 permalink: pretty
+url: "https://pnavarrc.github.com/earthquake"

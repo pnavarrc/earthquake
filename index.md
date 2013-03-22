@@ -185,35 +185,35 @@ layout: mapvis
 	  var MS_DAY = 24 * 60 * 60 * 1000,
           ms_epoch = Date.parse(datetime);
       return (ms_epoch - ms_epoch % MS_DAY) / MS_DAY;
-    };
+  };
 
-  	// Load the data
-   	d3.json('data/full.json', function(earthquakeData) {
+  // Load the data
+  d3.json('data/full.json', function(earthquakeData) {
 
-   	  // Add additional data to the eartquake events
-      var earthquakePoints = earthquakeData.features, 
-          firstDate = earthquakePoints[0].properties.datetime,
-          dayOffset = Math.abs(epochDay(firstDate));
+   	// Add additional data to the eartquake events
+    var earthquakePoints = earthquakeData.features, 
+        firstDate = earthquakePoints[0].properties.datetime,
+        dayOffset = Math.abs(epochDay(firstDate));
 
-      earthquakePoints.forEach(function(item) {
-      	var datetime = new Date(item.properties.datetime);
-      	item.properties['day'] = epochDay(datetime) + dayOffset;
-      	item.properties['year'] = datetime.getFullYear();
-      });
+    earthquakePoints.forEach(function(item) {
+      var datetime = new Date(item.properties.datetime);
+      item.properties['day'] = epochDay(datetime) + dayOffset;
+      item.properties['year'] = datetime.getFullYear();
+    });
 
-  	  // Load and draw the map
-  	  mapbox.load(mapconf.mapid, function(mbmap) {
+  	// Load and draw the map
+  	mapbox.load(mapconf.mapid, function(mbmap) {
 
-        map = mapbox.map("map", mbmap.layer, null, []);
-        earthquakeLayer = D3Layer().data(earthquakeData);
-    		map.addLayer(earthquakeLayer);
+      map = mapbox.map("map", mbmap.layer, null, []);
+      earthquakeLayer = D3Layer().data(earthquakeData);
+    	map.addLayer(earthquakeLayer);
 
-        // Configure the inital state of the map
-        map.setExtent(mapconf.extent);
-        map.zoom(mapconf.zoom);
-        map.ui.zoomer.add();
-        map.ui.attribution.add()
-          .content('<a href="http://mapbox.com/about/maps">Terms &amp; Feedback</a>');        
+      // Configure the inital state of the map
+      map.setExtent(mapconf.extent);
+      map.zoom(mapconf.zoom);
+      map.ui.zoomer.add();
+      map.ui.attribution.add()
+        .content('<a href="http://mapbox.com/about/maps">Terms &amp; Feedback</a>');        
 	  });
 
   });
