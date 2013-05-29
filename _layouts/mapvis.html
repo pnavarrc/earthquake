@@ -7,10 +7,10 @@
     <meta name="author" content="Pablo Navarro">
 
     <!-- Le styles -->
-    <link href="{{ site.url }}/css/bootstrap.min.css" rel="stylesheet">
-    <link href="{{ site.url }}/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link href="{{ site.baseurl }}/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ site.baseurl }}/css/bootstrap-responsive.min.css" rel="stylesheet">
     <link href='http://api.tiles.mapbox.com/mapbox.js/v0.6.7/mapbox.css' rel='stylesheet' />
-    <link href="{{ site.url }}/css/mapvis.css" rel="stylesheet">
+    <link href="{{ site.baseurl }}/css/mapvis.css" rel="stylesheet">
 
   	<script type="text/javascript">
   	  // Google Analytics snippet
@@ -35,9 +35,9 @@
 
 	  	<div class="introduction">
 	  		<h1 class="heading">{{ page.title }}</h1>
-	  		<p class="intro"><strong>This page allows to visualize the most important seismic events in Chile since 1900. The 
-	  			measurement process has improved over time, augmenting the quantity and quality 
-	  			of earthquake records. The radius and the color of the circles are function of the 
+	  		<p class="intro"><strong>This page allows to visualize the most important seismic events in Chile since 1900. The
+	  			measurement process has improved over time, augmenting the quantity and quality
+	  			of earthquake records. The radius and the color of the circles are function of the
 	  			earthquake magnitude.</strong></p>
 
 	  		<form class="inline-form">
@@ -55,7 +55,7 @@
 		    <div class="tab-pane active" id="tab-about">
 		    <p>I am Data Engineer at Algometrics Hedge Fund. I like to create data visualizations
 			 with open source tools. I also like to create <a href="http://pnavarrc.wordpress.com/">illustrations</a>
-			  in watercolor. Please, feel free to <a href="mailto:pnavarrc@gmail.com">contact me</a> and send me suggestions. You can fork and play with 
+			  in watercolor. Please, feel free to <a href="mailto:pnavarrc@gmail.com">contact me</a> and send me suggestions. You can fork and play with
 			 the <a href="https://github.com/pnavarrc/earthquake">source code</a> of this site in <a href="https://github.com">Github</a>.
 			</p>
 		      <address>
@@ -65,18 +65,18 @@
 		    <div class="tab-pane" id="tab-data">
 		    	<dl>
 		    		<dt>Maps</dt>
-			  	<dd>The mapping libraries and tiles are provided by 
-			  		<a href="http://mapbox.com/">MapBox</a>. 
+			  	<dd>The mapping libraries and tiles are provided by
+			  		<a href="http://mapbox.com/">MapBox</a>.
 			  		Mapbox uses open data from <a href="http://www.openstreetmap.org/">
 			  		OpenStreepMap</a> and its contributors.
 			  	</dd>
 				<dt>Earthquake Data</dt>
 				<dd>The earthquake data was retrieved from the <a href="http://quake.geo.berkeley.edu/cnss/">
-					ANSS Composite Catalog</a> and joined with the 
+					ANSS Composite Catalog</a> and joined with the
 					<a href="http://earthquake.usgs.gov/research/data/centennial.php">
 					Centennial Catalog</a> from the <a href="http://earthquake.usgs.gov/">USGS</a>. Thanks
 					 to the <a href="http://quake.geo.berkeley.edu/">Northern California
-					Earthquake Data Center (NCEDC)</a> and to the organizations that 
+					Earthquake Data Center (NCEDC)</a> and to the organizations that
 					contributed the data to the NCEDC.
 				</dd>
 				<dt>Code</dt>
@@ -98,6 +98,6 @@
 
     <script src='http://api.tiles.mapbox.com/mapbox.js/v0.6.6/mapbox.js'></script>
 	{{ content }}
-	<script src="{{ site.url }}/js/jquery.min.js"></script>
-	<script src="{{ site.url }}/js/bootstrap-tab.js"></script>
+	<script src="{{ site.baseurl }}/js/jquery.min.js"></script>
+	<script src="{{ site.baseurl }}/js/bootstrap-tab.js"></script>
 </body>

@@ -1,10 +1,14 @@
 # Earthquakes in Chile since 1900
 
-![Earthquakes in Chile](https://github.com/pnavarrc/earthquake/raw/develop/img/screenshot.png)
+<a href="http://pnavarrc.github.io/earthquake/">
+<img src="https://github.com/pnavarrc/earthquake/raw/develop/img/screenshot.png" alt="">
+</a>
+
+![Earthquakes in Chile]()
 
 This page allows to visualize the most important seismic events since 1900. The measurement process has improved over time, augmenting the quantity and quality of the earthquake records. The radius and the color of the circles maps to the earthquake magnitude. The interactive visualization:
 
-[Earthquakes in Chile since 1900](http://pnavarrc.github.com/earthquake/)
+[Earthquakes in Chile since 1900](http://pnavarrc.github.io/earthquake/)
 
 ## Data
 
