@@ -5,5 +5,4 @@ lsi: false
 markdown: rdiscount
 pygments: true
 permalink: pretty
-url: "http://pnavarrc.github.io/earthquake"
 baseurl: "http://pnavarrc.github.io/earthquake"
