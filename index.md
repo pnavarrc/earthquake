@@ -3,7 +3,7 @@ title: Earthquakes in Chile since 1900
 layout: mapvis
 ---
 
-<script src="js/d3.v2.min.js"></script>
+<script src="{{ site.baseurl }}/js/d3.v2.min.js"></script>
 <script type="text/javascript">
 
   var mapconf = {
@@ -26,7 +26,7 @@ layout: mapvis
    	  },
    	  txtInfo: {
    	  	margin: {
-          top: 80, 
+          top: 80,
           left: 0
         },
    	  	fontsize: 50
@@ -53,13 +53,13 @@ layout: mapvis
    	  	feature,
    	  	collection,
    	  	firstDraw = true,
-        magExtent, 
+        magExtent,
         dayExtent,
         eqRadius,
         eqDelay,
         eqDuration,
         eqColor;
-        
+
    	layer.parent = visDiv.node();
 
    	layer.project = function(coord) {
@@ -111,10 +111,10 @@ layout: mapvis
 
    	path = d3.geo.path()
       .projection(layer.project)
-      .pointRadius(function(item) { 
-      	return eqRadius(item.properties.magnitude); 
+      .pointRadius(function(item) {
+      	return eqRadius(item.properties.magnitude);
       });
-        
+
     feature.transition()
       .delay(function(item) {
         return eqDelay(item.properties.day);
@@ -178,7 +178,7 @@ layout: mapvis
     };
 
   	return layer;
-  
+
   };
 
 	function epochDay(datetime) {
@@ -188,10 +188,10 @@ layout: mapvis
   };
 
   // Load the data
-  d3.json('data/full.json', function(earthquakeData) {
+  d3.json('{{ site.baseurl }}/data/full.json', function(earthquakeData) {
 
    	// Add additional data to the eartquake events
-    var earthquakePoints = earthquakeData.features, 
+    var earthquakePoints = earthquakeData.features,
         firstDate = earthquakePoints[0].properties.datetime,
         dayOffset = Math.abs(epochDay(firstDate));
 
@@ -213,7 +213,7 @@ layout: mapvis
       map.zoom(mapconf.zoom);
       map.ui.zoomer.add();
       map.ui.attribution.add()
-        .content('<a href="http://mapbox.com/about/maps">Terms &amp; Feedback</a>');        
+        .content('<a href="http://mapbox.com/about/maps">Terms &amp; Feedback</a>');
 	  });
 
   });
