@@ -3,6 +3,6 @@ source: .
 destination: _site
 lsi: false
 markdown: rdiscount
-pygments: true
+highlighter: pigments
 permalink: pretty
 baseurl: "http://pnavarrc.github.io/earthquake"
